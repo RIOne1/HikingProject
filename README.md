@@ -20,9 +20,9 @@ Before starting repository changes, create or confirm the task's tracking Issue,
 
 The core workflow is Web selection of whole trails, junction segments or partial segments with snapping/via points, or simpler online route combination on mobile; save a private plan, sync it to iPhone, download it, walk and record, then deliberately submit feedback and App-recorded completion evidence for administrator approval before publication. Preserve chosen segments and confirm connectors; reject disconnected or confirmed-closed selections. Start with one connected, field-testable pilot network whose location is still undecided. Scenario coverage replaces the initial route-count gate; 20–30 curated routes remain a later content target.
 
-Guests retain browsing, local recording and downloaded-route use. Private GPX import/navigation, lock-screen off-route alerts, local history and GPX export remain in scope. Login is required for private-plan sync, condition reports and publication submissions. An incomplete hike can still produce a report; imported GPX alone cannot establish publication eligibility. Expired login must not block an existing offline hike. Confirmed closures block new planning, publication and starting planned navigation, while preserving map access, independent recording and ongoing hikes.
+Guests retain browsing, local recording and downloaded-route use. Private GPX keeps its original segments/gaps without requiring checked-network membership; import/navigation, lock-screen off-route alerts, local history and GPX export remain in scope. Login is required for private-plan sync, condition reports and publication submissions. An incomplete hike can still produce a report; imported GPX alone cannot establish publication eligibility. Expired login must not block an existing offline hike. Known confirmed closures block new planning, publication and starting planned navigation, while preserving map access, independent recording and ongoing hikes; offline clients can only act on received status.
 
-Raw tracks remain private by default; review receives only deliberately submitted route-relevant evidence. Public geometry changes require a new revision and review. Withdrawal/account deletion and reconnect cleanup must be verified before external release. Full backup/restore, automatic raw-history cloud backup, live sharing, offline/mid-hike replanning, automatic rerouting, voice turn-by-turn guidance and broader social features remain deferred. GPX export is not a full backup.
+Raw tracks remain private by default; submitted evidence must support the complete route, including connectors and repeated traversals, without requiring unrelated approach/departure locations. Public geometry changes require a new revision and review; status can update independently. Withdrawal/account deletion and reconnect cleanup must be verified before external release, distinguishing the deleting user's data from other users' independent recordings. Full backup/restore, automatic raw-history cloud backup, live sharing, offline/mid-hike replanning, automatic rerouting, voice turn-by-turn guidance and broader social features remain deferred. GPX export is not a full backup.
 
 The team is planned as two to three people. The owner leads development with AI assistance and leads testing. Practical SQL learning is an explicit project goal; contributors remain responsible for understanding and explaining their changes.
 
@@ -88,7 +88,7 @@ HikingProject/
 ├── docs/
 │   ├── MVP.md
 │   ├── MVP.zh-CN.md
-│   ├── guides/  # Development, mobile, web, data, CI and validation
+│   ├── guides/  # Development, mobile, web, backend, data, CI and validation
 │   └── research/
 │       └── 2026-11-06-user-feedback/
 │           ├── Hiking_App_User_Feedback_Research_ZH_2026-11-06.pdf

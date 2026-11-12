@@ -11,7 +11,7 @@ Start with [README.md](README.md), [CONTRIBUTING.md](CONTRIBUTING.md), the task 
 | Task | Required context |
 | --- | --- |
 | Product scope or acceptance | Relevant IDs in [English MVP](docs/MVP.md); update its [Chinese mirror](docs/MVP.zh-CN.md) when meaning changes |
-| Maps, offline operation, recording or alerts | MVP-03 through MVP-07 and the related implementation/tests |
+| Maps, offline operation, recording or alerts | MVP-03 through MVP-07; MVP-18 for access/status restrictions; related implementation/tests |
 | GPX, SQL, migrations or route content | MVP-02 and MVP-08 through MVP-10; current schema, fixtures and migrations |
 | Web planning, mobile combination or sync | MVP-10 and MVP-13 through MVP-16; [Data guide](docs/guides/DATA.md) and affected clients |
 | Accounts, publication, reports or deletion | MVP-11 and MVP-15 through MVP-20; [SECURITY.md](SECURITY.md) and relevant backend/client code |
@@ -51,6 +51,7 @@ English MVP is authoritative. If documents conflict materially, identify the con
 - Follow [tests and CI delivery](CONTRIBUTING.md#tests-and-ci-belong-with-the-change): add required tests with the change and confirm applicable PR CI runs them. Existing discovery needs no workflow edit. Report the covering job, exact commands/scenarios, results and limitations; never invent a pass or approval.
 - Keep CI proportionate: reuse commands/jobs; add jobs, dependencies or matrix entries for a concrete requirement or risk. Comment on non-obvious runner, trigger or permission choices. Avoid duplicate checks and unnecessary setup without dropping required coverage or masking failures.
 - Use meaningful checks rather than tests that copy the implementation. Prose-only edits need document checks, not an app build. Preserve bilingual MVP IDs and acceptance meaning; check local links and whitespace using the [documented commands](CONTRIBUTING.md#verification-evidence).
+- For shared-contract changes, update affected consumers and verify compatibility. Do not require unrelated client edits or the entire future MVP in every PR; identify the check's actual PR/product/release gate under CONTRIBUTING.md.
 - Offline, background-location, notification and battery claims need real-device evidence. Mark unavailable checks **Not run** and keep the relevant PR, product-acceptance or release gate blocked as defined in CONTRIBUTING.md; a follow-up Issue is not a waiver.
 - Use the [verified foundation commands](docs/guides/DEVELOPMENT.md#validation-matrix). Linux CI covers Web and portable Swift/SQLite, not the future Supabase/Auth/RLS flows; add relevant checks with those features in a verified free environment. iOS build/UI evidence requires local Mac/Xcode. Keep `project.yml` and its committed generated Xcode project aligned. The research PDF generator is not an app test.
 

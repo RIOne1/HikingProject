@@ -43,23 +43,24 @@ The following are logical responsibilities to resolve in implementation Issues, 
 | Concept | Required meaning |
 | --- | --- |
 | Checked network | Stable node/edge identity and connectivity, geometry, source/version, attribution and checked access conditions; visual crossings alone do not imply a junction |
-| Selected route parts | Ordered edge references, traversal direction and partial-edge boundaries with defined units/convention; preserve repetitions. Confirmed connectors are identifiable and never replace selected portions silently |
-| Route and immutable revision | Separate stable route identity from a saved geometry/selection snapshot and its source-network version. Editing creates a revision; updates do not silently rewrite downloaded or submitted geometry |
+| Selected network route parts | Ordered edge references, traversal direction and partial-edge boundaries with defined units/convention; preserve repetitions. Confirmed connectors are identifiable and never replace selected portions silently |
+| Private GPX | Local route identity/revision, original segments/gaps and unverified provenance; no fabricated network membership or forced snapping. This remains a private local workflow, not a new cloud-sync/publication path |
+| Route and immutable revision | Separate stable route identity from a saved geometry/selection snapshot and, for network plans, its source-network version. Editing creates a revision; updates do not silently rewrite downloaded or submitted geometry |
 | Ownership | Stable Auth user ID for private cloud records, independent of mutable email and map vendor IDs; distinguish guest-local records from account-owned plans |
 | Local trip | Ordered points, time, quality, gaps and the followed revision where known; separate from map cache, catalogue replacement and publication evidence |
-| Submission and evidence | Owner-selected route-relevant App-recorded portion plus feedback, bound to the exact revision; private review access and explicit decision/completion state |
+| Submission and evidence | Owner-selected route-relevant App-recorded portion plus feedback, bound to the exact revision including connectors/repeated traversals; privacy trimming cannot conceal missing route coverage |
 | Status/report | Provenance, observation/update time, affected segments/revisions and verification state; status can change without rewriting geometry. Expired closure data does not mean open |
 | Offline pack and sync | Exact revision/coverage, readiness and last-known status; complete replacement, retry/conflict handling and preservation of an existing usable snapshot |
-| Withdrawal/deletion | Stop server distribution and supply reconnect cleanup information without deleting independent user recordings; retention and active-hike handling require validation |
+| Withdrawal/deletion | Stop server distribution and supply reconnect cleanup information; distinguish the deleting account's own data from other users' independent recordings and unrelated guest-local records. Retention and active-hike handling require validation |
 
 GeoJSON geometry alone does not encode all these semantics. Agree the contract and representative fixtures with both clients before depending on them. Base-network changes must preserve old revision interpretation or make an incompatibility explicit; do not silently remap an old edge ID onto different geometry. Confirmed current closures still constrain new use of an older saved revision.
 
 ## Planned verification cases
 
-- Test junctions, loops, out-and-back, repeated edges, partial edges and disconnection against the same expected ordered selections in Swift/Web. Freeze coordinate/partial-boundary conventions in the contract PR rather than guessing them in each UI.
+- Test junctions, loops, out-and-back, repeated edges, partial edges and disconnection against the same expected ordered selections in Swift/Web. Test private GPX without network IDs separately, preserving gaps. Freeze coordinate/partial-boundary conventions in the contract PR rather than guessing them in each UI.
 - Demonstrate Web-save → iPhone-fetch and mobile-save/reopen equality, stale-edit conflicts and retried/interrupted writes. Repeated writes must not duplicate a logical route or expose a partial revision.
-- Test SQLite and PostgreSQL migrations with relevant earlier data, failed writes and ownership constraints. Query/index decisions must follow actual access patterns; important SQL and non-obvious constraints need explanations.
+- Test SQLite and PostgreSQL migrations with relevant earlier data, failed writes and ownership constraints through their respective migration tooling. GRDB still runs local app migrations; ordinary app clients must not receive backend schema-migration privileges. Test client RLS separately. Query/index decisions must follow actual access patterns; important SQL and non-obvious constraints need explanations.
 - Exercise RLS through anonymous, two-user and administrator sessions, including denied private-plan/evidence access, prohibited role changes and unauthorized publication. Passing tests with a privileged service key cannot establish client RLS correctness.
-- Verify completion-state/evidence binding, geometry revision review, closures and withdrawal/reconnect behaviour, preserving independent trip history. Quantitative completion thresholds remain pilot-validation work; a GPS record is not unforgeable proof.
+- Verify completion-state/evidence binding (including missing connectors/repeated traversals), geometry revision review, closures and withdrawal/reconnect behaviour. Test deletion of the requesting account's data separately from preserving other users' independent history. Quantitative completion thresholds remain pilot-validation work; a GPS record is not unforgeable proof.
 
 These are future acceptance cases, not existing test results. The [backend guide](BACKEND.md) covers local service preparation and the [foundation record](FOUNDATION-VALIDATION.md) preserves the narrower evidence that exists today.

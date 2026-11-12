@@ -11,7 +11,7 @@ The existing [data guide](DATA.md) distinguishes the synthetic schema v1 from th
 Create a scoped Issue and numbered branch under [CONTRIBUTING](../../CONTRIBUTING.md). That task should establish:
 
 1. Verified free local container/CLI prerequisites and pinned compatible versions, with reproducible setup/reset/test commands. Bind development services and captured mail to the authorized local environment. Do not create a cloud project or enable paid services as an incidental setup step.
-2. Committed configuration, explicit SQL migrations and synthetic seed data without working credentials. Separate disposable test resets from migrations that preserve application data. Document extension setup, including PostGIS, and important SQL/constraints.
+2. Committed configuration, explicit SQL migrations and synthetic seed data without working credentials. Run migrations through controlled tooling, separately from ordinary-client RLS tests. Separate disposable test resets from migrations that preserve application data. Document extension setup, including PostGIS, and important SQL/constraints.
 3. Real local Auth users and client access for guest, two distinct users and an administrator. Test ownership/RLS and privileged operations through actual access paths, not only service-role queries.
 4. A verified free CI approach and the checks that the PR runs. The existing runner is a container; see [CI limitations](CI.md#expanded-mvp-coverage-to-add-with-implementation) before assuming it can run a nested Supabase stack.
 
@@ -27,13 +27,13 @@ Use [Supabase local development](https://supabase.com/docs/guides/local-developm
 
 ## Data and operation boundaries
 
-Private-plan synchronization transfers owned plan revisions with geometry/ordered parts and planning metadata. It does not upload all raw trip history. Keep raw recordings local by default; publication receives a deliberate route-relevant App-recorded portion and feedback, privately accessible for review. Approval and completion evidence bind to a specific revision. Geometry edits require new review and appropriate evidence; current closure/status updates must still affect new use of older saved geometry.
+Private-plan synchronization transfers owned checked-network plan revisions with geometry/ordered parts and planning metadata. It does not upload all raw trip history or add a private-GPX cloud workflow. Keep raw recordings local by default; publication receives deliberate route-relevant App-recorded evidence plus feedback, covering the complete submitted revision including connectors/repeated traversals without requiring unrelated locations. Geometry edits require new review and appropriate evidence; current closure/status updates must still affect new use of older saved geometry.
 
 Public clients may discover approved content; they must not read private plans/evidence or invoke administrator actions. Administrators manage users, base content, status and submissions, with recorded reasons/revisions, without directly editing private plans or browsing unrelated history. Keep state changes transactional where partial writes could expose a route prematurely.
 
 Design retried writes, stale-edit conflicts and interrupted sync before connecting both clients. Login expiry/outage cannot block existing offline navigation or delete local history; account switching must isolate account-owned caches. Do not silently resolve conflicting geometry by replacing the user's chosen segments.
 
-Withdrawal/deletion must stop server public display/distribution, process personal data/UGC and provide reconnect cleanup information. Distinguish downloaded public content from other users' independent recorded trips and ongoing hikes. Retention, cleanup timing and active-hike behaviour remain external-release validation gates, not permission to retain content indefinitely. See [SECURITY](../../SECURITY.md) and MVP-17 through MVP-20 for the full requirements.
+Withdrawal/deletion must stop server public display/distribution, process personal data/UGC and provide reconnect cleanup information. Define deletion of the requesting account's server data/evidence and the client's corresponding account-data handling; preservation of other users' independent recordings is not an exemption for the deleting user's data. Distinguish unrelated guest-local records and logout from explicit deletion. Retention, cleanup timing and active-hike behaviour remain external-release validation gates, not permission to retain content indefinitely. See [SECURITY](../../SECURITY.md) and MVP-17 through MVP-20 for the full requirements.
 
 ## Evidence expected with feature PRs
 

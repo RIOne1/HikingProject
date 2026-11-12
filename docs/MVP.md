@@ -82,13 +82,13 @@ Keep completed trips available locally and allow deliberate GPX export. Use defi
 
 Use SQLite + GRDB on iPhone and PostgreSQL + PostGIS in the backend. Use explicit parameterized SQL, constraints, transactions and versioned migrations appropriate to each database. Stable business IDs remain independent of map caches and vendor IDs. Access the backend through Supabase SDKs and reviewed SQL/RLS; Prisma is not part of the MVP.
 
-**Acceptance:** test relevant write failures/interruption, query/index behaviour and upgrades from representative earlier schemas without data loss. Failed imports/updates cannot leave partial user data. Map/catalogue replacement cannot delete trips or private plans. Server tests exercise migrations and user/role isolation through the actual client access path. Explain important SQL; SQLite migrations do not stand in for PostgreSQL migrations or RLS tests.
+**Acceptance:** test relevant write failures/interruption, query/index behaviour and upgrades from representative earlier schemas without data loss. Failed imports/updates cannot leave partial user data. Map/catalogue replacement cannot delete trips or private plans. Run server migrations through controlled migration tooling; test user/role isolation separately through actual client access paths. Explain important SQL; SQLite migrations do not stand in for PostgreSQL migrations or RLS tests.
 
 ### MVP-10 — Versioned network and route content
 
-Use GeoJSON geometry and JSON metadata for interchange, with source IDs, attribution, timestamps, access/verification state and network version. Planning needs connected topology and ordered selected segments, not just display polylines. Freeze saved route revisions; later network edits cannot silently reshape a saved, downloaded or submitted route.
+Use GeoJSON geometry and JSON metadata for interchange, with source IDs, attribution, timestamps and access/verification state. Checked-network plans also retain network versions, connected topology and ordered selected segments, not just display polylines. Private GPX uses a local route revision and its original segment/gap semantics; do not invent network IDs or snap it into the checked network to fit this contract. Freeze saved geometry/selection revisions; later network edits cannot silently reshape a saved, downloaded or submitted route. Current access and withdrawal status remain independently updateable.
 
-**Acceptance:** reject unsupported/incompatible versions, invalid topology/content and interrupted updates while retaining usable data. Both clients agree on direction, order, repeated edges and partial-segment boundaries. Downloads and sync identify the exact route/network revisions; stale or unavailable status is explicit. Local fixtures/endpoints support free development; hosted delivery is a separate release gate. The current synthetic metadata schema is not this completed contract.
+**Acceptance:** reject unsupported/incompatible versions, invalid topology/content and interrupted updates while retaining usable data. Both clients agree on checked-network direction, order, repeated edges and partial-segment boundaries. Downloads identify the exact route revision and, where applicable, network version; plan sync preserves these identities. Test a private GPX without network membership as well as a network plan. Stale or unavailable status is explicit. Local fixtures/endpoints support free development; hosted delivery is a separate release gate. The current synthetic metadata schema is not this completed contract.
 
 ### MVP-11 — Privacy, permissions and untrusted input
 
@@ -128,15 +128,15 @@ Authenticated owners can save private plans on Web/mobile and fetch the same rev
 
 ### MVP-17 — Completion evidence and moderated publication
 
-After walking, the owner provides feedback and may deliberately submit the route-relevant App-recorded track portion for private administrator review, tied to the exact route revision. Evidence that supports completion permits an application, not automatic publication. Insufficient evidence requires additional evidence/manual review; clearly incomplete traversal does not qualify the whole planned route. GPS is supporting evidence, not unforgeable proof.
+After walking, the owner provides feedback and may deliberately submit the route-relevant App-recorded track portion for private administrator review, tied to the exact route revision. Evidence must support the whole submitted route, including confirmed connectors and repeated traversals; excluding unrelated approach/departure locations for privacy must not conceal missing route coverage. Evidence that supports completion permits an application, not automatic publication. Insufficient evidence requires additional evidence/manual review; clearly incomplete traversal does not qualify the whole planned route. GPS is supporting evidence, not unforgeable proof.
 
-**Acceptance:** test supported, insufficient and clearly incomplete cases, GPS gaps and repeated segments; calibrate completion thresholds with pilot evidence before acceptance. Self-declaration or imported GPX alone cannot satisfy the App-recorded requirement; manual review cannot waive actual completion. Keep draft/submitted/needs-evidence/rejected/approved-published/withdrawn states distinguishable. Only an authorized administrator can publish an eligible submitted revision; geometry changes require a new revision, new review and evidence appropriate to that revision. Old approval/evidence never transfers automatically.
+**Acceptance:** test supported, insufficient and clearly incomplete cases, GPS gaps, missing connectors and repeated segments; calibrate completion thresholds with pilot evidence before acceptance. Self-declaration or imported GPX alone cannot satisfy the App-recorded requirement; manual review cannot waive actual completion. Keep draft/submitted/needs-evidence/rejected/approved-published/withdrawn states distinguishable. Only an authorized administrator can publish an eligible submitted revision; geometry changes require a new revision, new review and evidence appropriate to that revision. Old approval/evidence never transfers automatically.
 
 ### MVP-18 — Condition reports and closure handling
 
 Signed-in users can report route conditions even after an incomplete or aborted hike. Distinguish unverified community reports from confirmed closure/access information, with provenance and observation/update time. Administrators assess reports; a report does not automatically become an official closure.
 
-**Acceptance:** a confirmed closure blocks affected new planning, publication and starting a new planned navigation session. Map inspection and independent recording remain available, and an ongoing hike/navigation is not forcibly stopped. Expired closure information does not imply reopening. Offline packs show last-known status and its limitations; reconnecting refreshes available status without claiming real-time coverage.
+**Acceptance:** a confirmed closure known to the client/server performing an operation blocks affected new planning, publication and starting a new planned navigation session. Test a closure cached before departure and one learned after reconnection: an offline client cannot enforce an update it has not received. Map inspection and independent recording remain available, and an ongoing hike/navigation is not forcibly stopped. Expired closure information does not imply reopening. Offline packs show last-known status and its limitations; reconnecting refreshes available status without claiming real-time coverage.
 
 ### MVP-19 — Administrator console and public-content moderation
 
@@ -148,7 +148,7 @@ Provide authorized administrators with user management, route/base-network maint
 
 Allow route withdrawal and user-initiated account deletion, including an in-app entry point. Stop server public display and further distribution of withdrawn content and handle associated personal data and user-generated content. Reconnecting clients process withdrawal information; do not delete another person's own recorded trips or forcibly interrupt an active hike.
 
-**Acceptance:** test server access removal, deletion scope and reconnect cleanup for saved public content, alongside preservation of independent local recordings. Immediate deletion from a disconnected device cannot be guaranteed. Define cleanup timing, active-hike handling, retention and user-facing explanations, then validate them before external/public release. Do not assume anonymizing the author permits indefinite retention of their published content; verify the implemented flow against [Apple account-deletion requirements](https://developer.apple.com/help/app-review/guideline-reference/5-1-1-account-deletion).
+**Acceptance:** test server access removal, deletion scope and reconnect cleanup for saved public content, while preserving other users' independent recordings. This preservation rule is not an exemption for the deleting account's own personal data: document how its server data, evidence and on-device account data are handled, distinguishing unrelated guest-local records. Logout/session expiry is not an account-deletion request. Immediate deletion from a disconnected device cannot be guaranteed. Define cleanup timing, active-hike handling, retention and user-facing explanations, then validate them before external/public release. Do not assume anonymizing the author permits indefinite retention of their published content; verify the implemented flow against [Apple account-deletion requirements](https://developer.apple.com/help/app-review/guideline-reference/5-1-1-account-deletion).
 
 ## 4. Technical baseline
 
@@ -165,7 +165,7 @@ Allow route withdrawal and user-initiated account deletion, including an in-app 
 | Data and transfer | Versioned GeoJSON + JSON, route revisions and local snapshots; GPX via Foundation XML processing; URLSession where appropriate |
 | Dependencies | Swift Package Manager and npm; stable compatible versions and reviewed lockfiles |
 | Verification | Swift Testing, XCTest, Web tests, SQL/RLS integration checks when implemented, and real-device field evidence |
-| Delivery | Existing self-hosted Linux CI; local Mac/Xcode iOS checks; external hosting and production mail remain unselected/unconfigured |
+| Delivery | Existing self-hosted Linux CI; local Mac/Xcode iOS checks; external hosting is undecided and production services/mail are unconfigured |
 
 Mapbox rendering is not the graph/routing engine. Do not assume PostGIS alone solves routing or adopt a paid Directions service without validating ordered-selection semantics and costs. Keep business logic independent of vendor rendering types, but avoid a speculative universal framework. New dependencies and material contracts need review; later stack changes must explain requirement, migration, cost and verification impact.
 
@@ -181,7 +181,7 @@ Mapbox rendering is not the graph/routing engine. Do not assume PostGIS alone so
 
 ### Development acceptance
 
-Implement MVP-01 through MVP-20 with traceable evidence, no blocking core-flow defects and non-author human review under [CONTRIBUTING](../CONTRIBUTING.md). Record checks as **Passed**, **Failed**, **Not run** with a reason, or **Not applicable** with justification. Required unrun checks remain blockers; documentation, AI review or a green foundation build is not product acceptance.
+Implement the development-stage behaviour of MVP-01 through MVP-20 with traceable evidence, no blocking core-flow defects and non-author human review under [CONTRIBUTING](../CONTRIBUTING.md). Use local services and captured mail at this stage; the explicitly named external/public-release checks below remain open until those milestones. They do not require deployment or block unrelated documentation/incremental PRs. Record checks as **Passed**, **Failed**, **Not run** with a reason, or **Not applicable** with justification. Required unrun checks block their applicable PR or milestone; documentation, AI review or a green foundation build is not product acceptance.
 
 | Open validation | Evidence needed before the affected requirement can pass |
 | --- | --- |

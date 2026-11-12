@@ -13,7 +13,7 @@ Start here after reading [CONTRIBUTING](../../CONTRIBUTING.md). The existing fou
 
 For a two-person team, split mobile and Web implementation while jointly reviewing the data/backend contract; sequence backend work explicitly instead of assuming a separate backend engineer. A third member can own data/backend validation. Assign actual people through Issues; these are work boundaries, not automatic GitHub permissions or CODEOWNERS rules. Keep one primary Issue per branch/PR and obtain non-author human review under CONTRIBUTING.
 
-Changes to the shared contract should reach agreement on fields, units, versioning and failure behaviour before either client depends on them. Include both decoders, fixtures and relevant tests in the same PR when the contract changes. Avoid moving mobile business logic into Mapbox views or introducing a shared abstraction framework.
+Changes to the shared contract should reach agreement on fields, units, versioning and failure behaviour before either client depends on them. Update affected decoders, fixtures and tests together; demonstrate compatibility for unchanged consumers. A compatible additive change need not modify both clients. For a staged rollout, document supported versions and PR dependencies rather than silently breaking a consumer. Avoid moving mobile business logic into Mapbox views or introducing a shared abstraction framework.
 
 ## First local run
 
