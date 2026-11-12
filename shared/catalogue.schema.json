@@ -34,7 +34,7 @@
           "name": {
             "type": "string",
             "minLength": 1,
-            "pattern": "\\S"
+            "pattern": "[^\\p{White_Space}\\uFEFF]"
           },
           "difficulty": {
             "enum": [
@@ -68,7 +68,7 @@
           "attribution": {
             "type": "string",
             "minLength": 1,
-            "pattern": "\\S"
+            "pattern": "[^\\p{White_Space}\\uFEFF]"
           }
         }
       }

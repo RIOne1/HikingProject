@@ -36,8 +36,7 @@ public struct Catalogue: Codable, Equatable, Sendable {
         var ids = Set<String>()
         for route in routes {
             guard route.id.range(of: "^[a-z0-9]+(?:-[a-z0-9]+)*$", options: .regularExpression) != nil,
-                  !route.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
-                  !route.attribution.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+                  Self.nonBlank(route.name), Self.nonBlank(route.attribution),
                   (1...100_000).contains(route.distanceMetres),
                   (1...1440).contains(route.estimatedMinutes),
                   route.startLatitude.isFinite, (-90...90).contains(route.startLatitude),
@@ -47,5 +46,11 @@ public struct Catalogue: Codable, Equatable, Sendable {
             }
             guard ids.insert(route.id).inserted else { throw ValidationError.duplicateID(route.id) }
         }
+    }
+
+    private static func nonBlank(_ value: String) -> Bool {
+        // Match the JSON Schema/TypeScript rule: Unicode White_Space plus BOM.
+        // Foundation trimming and JavaScript trim disagree on NEL and BOM.
+        value.unicodeScalars.contains { !$0.properties.isWhitespace && $0.value != 0xFEFF }
     }
 }

@@ -9,14 +9,14 @@ The single [sample catalogue](../../shared/fixtures/catalogue.sample.json) is bu
 | `schemaVersion` | Exactly `1`; reject unsupported versions |
 | `routes` | At most 100 entries; empty is valid |
 | `id` | Stable lowercase ASCII letters/digits/hyphens, nonempty and unique within the catalogue |
-| `name`, `attribution` | Nonblank text |
+| `name`, `attribution` | Text containing a character outside Unicode `White_Space` and U+FEFF (BOM); preserve the original text |
 | `difficulty` | `easy` or `moderate`; synthetic categorization, not a verified external grading system |
 | `distanceMetres` | Integer 1–100000, metres |
 | `estimatedMinutes` | Integer 1–1440, minutes |
 | `startLatitude`, `startLongitude` | Finite WGS84 degrees, respectively −90…90 and −180…180 |
 | `sourceKind` | Exactly `synthetic`; the foundation must not imply verified or user-imported content support |
 
-The bounds protect this small fixture contract; they are not GPX import limits or product acceptance thresholds. Unknown object fields are ignored; required fields and types remain checked. Unique IDs are an additional decoder rule beyond the JSON Schema. Both Swift and TypeScript validate at the data boundary before display or persistence. Schema tests check the shared fixture and representative invalid values.
+The bounds protect this small fixture contract; they are not GPX import limits or product acceptance thresholds. Unknown object fields are ignored; required fields and types remain checked. Unique IDs are an additional decoder rule beyond the JSON Schema. Both Swift and TypeScript validate at the data boundary before display or persistence. Tests cover the shared fixture, representative invalid values and Unicode text boundaries in both clients; Web tests also exercise the schema. Use the explicit nonblank rule rather than platform-default trimming, which differs for U+0085 (NEL) and U+FEFF.
 
 When adding real content, design versioning, geometry/segment semantics, source/update timestamps, attribution and verification states together. Do not relabel these fixtures as real routes or silently broaden version 1 into a production contract. Include both clients and compatibility/failure evidence in the contract PR.
 

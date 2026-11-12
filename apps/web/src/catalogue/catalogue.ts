@@ -20,7 +20,8 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 function nonBlank(value: unknown): value is string {
-  return typeof value === 'string' && value.trim().length > 0
+  // Match Swift and the schema; trim() alone does not treat NEL as whitespace.
+  return typeof value === 'string' && /[^\p{White_Space}\uFEFF]/u.test(value)
 }
 
 function inRange(value: unknown, min: number, max: number): value is number {

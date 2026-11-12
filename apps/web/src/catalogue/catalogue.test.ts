@@ -33,4 +33,21 @@ describe('shared catalogue contract', () => {
     expect(filterRoutes(catalogue.routes, 'missing')).toEqual([])
     expect(catalogue.routes).toHaveLength(2)
   })
+  it.each(['', ' \t\r\n', '\u0085', '\u00A0', '\uFEFF'])('rejects blank text %j in both text fields', value => {
+    for (const field of ['name', 'attribution']) {
+      const input = structuredClone(fixture)
+      Object.assign(input.routes[0], { [field]: value })
+      expect(validateSchema(input)).toBe(false)
+      expect(() => parseCatalogue(input)).toThrow(/Invalid/)
+    }
+  })
+  it('preserves nonblank Unicode text without normalizing it', () => {
+    const text = '\u0085Te Ara Māori / 徒步\uFEFF'
+    const input = structuredClone(fixture)
+    Object.assign(input.routes[0], { name: text, attribution: text })
+    expect(validateSchema(input)).toBe(true)
+    const route = parseCatalogue(input).routes[0]
+    expect(route.name).toBe(text)
+    expect(route.attribution).toBe(text)
+  })
 })

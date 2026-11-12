@@ -48,3 +48,26 @@ func invalidNumericFieldsAreRejected(field: String) throws {
     }
     #expect(throws: Catalogue.ValidationError.invalidRoute("sample-coastal-loop")) { try Catalogue.decode(data) }
 }
+
+@Test(arguments: ["", " \t\r\n", "\u{0085}", "\u{00A0}", "\u{FEFF}"], ["name", "attribution"])
+func blankCatalogueTextIsRejected(value: String, field: String) throws {
+    let data = try modifiedFixture { json in
+        var routes = json["routes"] as! [[String: Any]]
+        routes[0][field] = value
+        json["routes"] = routes
+    }
+    #expect(throws: Catalogue.ValidationError.invalidRoute("sample-coastal-loop")) { try Catalogue.decode(data) }
+}
+
+@Test func unicodeCatalogueTextIsPreserved() throws {
+    let text = "\u{0085}Te Ara Māori / 徒步\u{FEFF}"
+    let data = try modifiedFixture { json in
+        var routes = json["routes"] as! [[String: Any]]
+        routes[0]["name"] = text
+        routes[0]["attribution"] = text
+        json["routes"] = routes
+    }
+    let route = try Catalogue.decode(data).routes[0]
+    #expect(route.name == text)
+    #expect(route.attribution == text)
+}

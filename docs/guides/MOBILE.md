@@ -20,14 +20,15 @@ Core Location is an Apple framework used here only for the map camera coordinate
 From the repository root, resolve and test the portable core:
 
 ```bash
-swift package resolve
+swift package resolve --force-resolved-versions
 swift test --disable-automatic-resolution --jobs 2
 ```
 
-Use the committed `Package.resolved`; do not casually update packages during unrelated work. Resolve the app's package graph and list available simulators:
+Use the committed root `Package.resolved` for both commands and the app graph. With this project/toolchain, Xcode records Mapbox's transitive pins there alongside GRDB; the portable package itself only depends on GRDB. A plain `swift package resolve` removes the app-only pins, so use the locked commands below and review any lockfile change as a dependency change. Resolve the app's package graph and list available simulators:
 
 ```bash
-xcodebuild -resolvePackageDependencies -project apps/mobile/HikingProject.xcodeproj -scheme HikingProject
+xcodebuild -resolvePackageDependencies -onlyUsePackageVersionsFromResolvedFile \
+  -project apps/mobile/HikingProject.xcodeproj -scheme HikingProject
 xcrun simctl list devices available
 ```
 
@@ -37,6 +38,7 @@ Set `IOS_SIMULATOR_ID` to an actual available iPhone simulator's UUID, then run:
 xcodebuild test \
   -project apps/mobile/HikingProject.xcodeproj \
   -scheme HikingProject \
+  -onlyUsePackageVersionsFromResolvedFile \
   -destination "platform=iOS Simulator,id=$IOS_SIMULATOR_ID" \
   -derivedDataPath tmp/mobile/DerivedData \
   CODE_SIGNING_ALLOWED=NO
@@ -48,7 +50,7 @@ This builds the app and runs XCTest UI tests. It does **not** run the root Swift
 
 Mapbox Maps SDK **11.34.2** is pinned through SPM. Its dependency graph and binaries resolved without a Mapbox credential during foundation verification. This is evidence of dependency access, not proof of ongoing free map usage, offline support or privacy behaviour. See [Mapbox installation](https://docs.mapbox.com/ios/maps/guides/install/) and the MVP's technical/cost gates.
 
-By default `MAPBOX_ACCESS_TOKEN` is empty. The app does not instantiate a Mapbox view without a `pk.` token and displays an explanatory placeholder while retaining the catalogue. Do not create/activate a paid account for this task. Only after permitted no-card access and applicable limits are verified, copy `Config/Local.example.xcconfig` to `Config/Local.xcconfig` and set an authorized public token. That local file is ignored. Never put a secret token or actual public token in committed source, screenshots or PRs. A public app token will be embedded in a configured build and is not a server secret.
+By default `MAPBOX_ACCESS_TOKEN` is empty. The app does not instantiate a Mapbox view without a `pk.` token and displays an explanatory placeholder while retaining the catalogue. Do not create/activate a paid account for this task. Only after permitted no-card access and applicable limits are verified, copy `apps/mobile/Config/Local.example.xcconfig` to `apps/mobile/Config/Local.xcconfig` from the repository root and set an authorized public token. That local file is ignored. Never put a secret token or actual public token in committed source, screenshots or PRs. A public app token will be embedded in a configured build and is not a server secret.
 
 The optional preview shows the area around a **synthetic start point**, not a route line. Map attribution controls are left to the SDK. UI smoke tests pass `--tokenless-preview` so tests do not consume map usage even on a locally configured machine. Runtime map rendering, telemetry, offline packs and production costs remain unverified.
 
@@ -61,6 +63,8 @@ xcodegen generate --spec apps/mobile/project.yml
 ```
 
 Use the official [XcodeGen release](https://github.com/yonaskolb/XcodeGen/releases/tag/2.46.0). The `xcodegen.zip` used for this foundation has SHA-256 `4d9e34b62172d645eed6457cac13fc222569974098ef4ee9c3368bedf0196806`; verify a download before running it. A locally unpacked `bin/xcodegen` works without global installation. Commit the generated project/plist/scheme and dependency lockfile together. Do not commit `xcuserdata`, DerivedData or `Local.xcconfig`.
+
+The generated app plist binds its version fields to `MARKETING_VERSION` and `CURRENT_PROJECT_VERSION` in `project.yml` (currently `0.1.0` / `1`). Change those settings and regenerate when versioning a build; do not edit a second literal version in the plist.
 
 ## SQL and future features
 
