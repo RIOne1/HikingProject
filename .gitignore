@@ -7,3 +7,12 @@ node_modules/
 /output/
 __pycache__/
 *.py[cod]
+.build/
+.swiftpm/
+DerivedData/
+xcuserdata/
+*.xcuserstate
+Local.xcconfig
+dist/
+coverage/
+*.tsbuildinfo

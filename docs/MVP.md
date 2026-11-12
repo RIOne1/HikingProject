@@ -2,7 +2,7 @@
 
 **Status:** agreed specification; implementation and acceptance evidence are pending.
 
-**Decision baseline:** 12 November 2026.
+**Decision baseline:** 13 November 2026.
 
 **Authority:** this English document is authoritative. [中文镜像](MVP.zh-CN.md) must retain the same requirement IDs, scope and acceptance conditions. Update both in the same PR when meaning changes.
 
@@ -20,7 +20,7 @@ The project is also intended to develop the owner's SQL skills through real sche
 
 ## 2. Delivery and cost boundaries
 
-- The long-term platform direction is iPhone only, on iOS 18 or later. Other client platforms are outside the agreed direction. Multi-day and advanced hiking and other countries are not first-release commitments.
+- The consumer product direction is iPhone only, on iOS 18 or later. A React/TypeScript/Vite web companion is approved for internal team route/content work; it does not add consumer web parity, a backend or GL JS. Other consumer client platforms remain outside the agreed direction. Multi-day and advanced hiking and other countries are not first-release commitments.
 - No account is required. Trip history belongs in local storage. The first release has no application backend, accounts service or cloud database.
 - Current development must remain free. Do not activate paid services, paid CI or paid upgrades. A trial ending or a quota being exhausted means pausing the affected service, not authorizing payment.
 - Mapbox Maps SDK for iOS is a **conditional selection**. Verify its actual no-card trial, offline behaviour and integration before relying on them. A free trial is not a permanent free production entitlement.
@@ -107,6 +107,7 @@ The owner leads real-device tests of the complete workflow on representative rou
 | Area | Agreed approach |
 | --- | --- |
 | Client | Swift, SwiftUI, iOS 18+; UIKit integration where required |
+| Internal content tool | React + TypeScript + Vite, local-first team workspace; npm lockfile, Vitest/Testing Library and ESLint |
 | Maps | Mapbox Maps SDK for iOS; its managed offline cache stays separate from business data |
 | Location and alerts | Core Location and local notifications; recording independent of map rendering |
 | Persistence | SQLite + GRDB, explicit parameterized SQL and schema migrations |
@@ -128,7 +129,7 @@ Keep route, recording and persistence logic independent of vendor rendering type
 - Mapbox GL JS browser tools.
 - Multi-day/advanced hiking, global catalogue coverage and other unapproved feature expansion.
 
-These are future candidates, not first-release promises. Additional client platforms are outside the agreed direction, not scheduled later work. A scope change needs a reviewed update to both MVP language versions before it is treated as required work.
+These are future candidates, not first-release promises. Additional consumer client platforms are outside the agreed direction, not scheduled later work. The internal React tool above supports team content work only. A scope change needs a reviewed update to both MVP language versions before it is treated as required work.
 
 ## 6. Verification and Definition of Done
 
@@ -151,7 +152,7 @@ In addition to development acceptance:
 - Configure and verify the GitHub review protections described in [CONTRIBUTING.md](../CONTRIBUTING.md); file-based policy alone does not enforce them.
 - Verify privacy disclosures against the implemented app and actual SDK behaviour.
 
-**Current state:** repository CI checks documentation integrity and contribution metadata; it does not establish application acceptance. No iOS app project or application test suite exists yet. The first app-bootstrap PR must document real targets, schemes and build/test commands after verifying them. Until then, do not present guessed commands or checked boxes as evidence. See [CONTRIBUTING.md](../CONTRIBUTING.md#verification-evidence) for the actual checks and their limits.
+**Current state:** the repository has iOS and internal React foundations, a shared synthetic metadata catalogue, SQL storage and automated tests. CI covers documentation, contribution metadata, Web and portable Swift/data checks; local Mac/Xcode covers iOS build/UI verification. The [development guide](guides/DEVELOPMENT.md) and [foundation validation record](guides/FOUNDATION-VALIDATION.md) distinguish actual evidence from remaining checks. The sample catalogue is not the 20–30 verified routes, and no MVP requirement is declared accepted by this bootstrap. Offline maps, location/recording, warnings, GPX, real content and release gates remain pending.
 
 ## 7. Evidence and maintenance
 

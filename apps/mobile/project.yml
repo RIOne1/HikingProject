@@ -1,0 +1,66 @@
+name: HikingProject
+options:
+  minimumXcodeGenVersion: 2.46.0
+  deploymentTarget:
+    iOS: '18.0'
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: '6.0'
+    TARGETED_DEVICE_FAMILY: '1'
+    CODE_SIGN_STYLE: Automatic
+packages:
+  HikingFoundation:
+    path: ../..
+  MapboxMaps:
+    url: https://github.com/mapbox/mapbox-maps-ios.git
+    exactVersion: 11.34.2
+targets:
+  HikingProject:
+    type: application
+    platform: iOS
+    sources: [App]
+    configFiles:
+      Debug: Config/Base.xcconfig
+      Release: Config/Base.xcconfig
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: nz.hikingproject.foundation
+        MARKETING_VERSION: '0.1.0'
+        CURRENT_PROJECT_VERSION: '1'
+    info:
+      path: Config/Info.plist
+      properties:
+        CFBundleDisplayName: HikingProject
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        MBXAccessToken: $(MAPBOX_ACCESS_TOKEN)
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+    dependencies:
+      - package: HikingFoundation
+        product: HikingCore
+      - package: HikingFoundation
+        product: HikingSampleData
+      - package: MapboxMaps
+  HikingProjectUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: [UITests]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: nz.hikingproject.foundation.uitests
+        GENERATE_INFOPLIST_FILE: YES
+    dependencies:
+      - target: HikingProject
+schemes:
+  HikingProject:
+    build:
+      targets:
+        HikingProject: all
+    test:
+      targets: [HikingProjectUITests]
+      gatherCoverageData: false
