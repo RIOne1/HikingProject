@@ -18,7 +18,8 @@ concurrency:
 jobs:
   documentation:
     name: Documentation integrity
-    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: [self-hosted, linux, x64, hikingproject-local-ci]
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -33,8 +34,8 @@ jobs:
 
   contribution:
     name: Contribution policy
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: [self-hosted, linux, x64, hikingproject-local-ci]
     timeout-minutes: 5
     permissions:
       contents: read
