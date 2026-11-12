@@ -45,7 +45,7 @@ Do not use tool or person namespaces such as `codex/...`, `chatgpt/...`, `claude
 
 Do not push directly to `main`, force-push `main`, or delete it. AI agents must not force-push any branch. Humans must coordinate before rewriting a shared branch; a rewrite also invalidates previous approval. Do not rewrite existing history just to adopt a new naming convention.
 
-**One-time adoption record:** [PR #1](https://github.com/RIOne1/HikingProject/pull/1) and its `docs/mvp-and-team-guidelines` branch predate this requirement. At the owner's request to continue the same PR, that existing head is retained and linked to [Issue #2](https://github.com/RIOne1/HikingProject/issues/2), which was created before the follow-up policy edits. Renaming an open PR's head [closes the PR](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-branches-in-your-repository/renaming-a-branch). This adoption record applies only to PR #1's original branch name and earlier work; all new tasks and branches must follow the Issue-first rule. It does not waive any review or merge requirement.
+**One-time adoption record:** [PR #1](https://github.com/RIOne1/HikingProject/pull/1) and its `docs/mvp-and-team-guidelines` branch predate this requirement. At the owner's request to continue the same PR, that head was retained and linked to [Issue #2](https://github.com/RIOne1/HikingProject/issues/2), which was created before the follow-up policy edits. PR #1 has since been merged. Renaming an open PR's head [closes the PR](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-branches-in-your-repository/renaming-a-branch). This adoption record applies only to PR #1's original branch name and earlier work; all new tasks and branches must follow the Issue-first rule. It does not waive any review or merge requirement.
 
 ## 3. Commit messages and PR titles
 
@@ -148,7 +148,7 @@ Delete the merged branch. Do not reuse it for the next task. Do not enable auto-
 
 ## 7. GitHub enforcement setup
 
-**Verified on 12 November 2026:** this is a public personal repository. The active [`protect-main` ruleset](https://github.com/RIOne1/HikingProject/settings/rules/27098958) targets `main`, requires a PR and one approval, dismisses stale approvals on push, requires resolved review conversations, permits only squash merging, and blocks force pushes and deletion. Its bypass list is empty. PR #1 visibly requires approval and cannot merge without it. Force-push and deletion settings were inspected, not destructively tested.
+**Verified on 12 November 2026:** this is a public personal repository. The active [`protect-main` ruleset](https://github.com/RIOne1/HikingProject/settings/rules/27098958) targets `main`, requires a PR and one approval, dismisses stale approvals on push, requires resolved review conversations, permits only squash merging, and blocks force pushes and deletion. Its bypass list is empty. Force-push and deletion settings were inspected, not destructively tested.
 
 Maintain the following configuration. File-based policy does not configure GitHub, and settings can change independently of this document.
 
@@ -163,7 +163,7 @@ Maintain the following configuration. File-based policy does not configure GitHu
 
 Settings and CI do not establish human identity, Issue-before-development order or complete review. The author and reviewer must still apply the human merge duties in section 6.
 
-**CI rollout boundary:** `Documentation integrity` and `Contribution policy` are the new workflow's actual job names. They are not yet registered as required ruleset checks. PR #1 and the CI bootstrap PR remain unmerged, so `main` does not yet contain this workflow. Requiring these checks now would leave PR #1 waiting for jobs its branch does not define. After the human-approved bootstrap merge, verify runs on `main` and a subsequent PR, then add those exact GitHub Actions checks to `protect-main` without weakening the existing approval requirements. This is an explicit pending setup step, not a claim of complete CI enforcement. Team policy already requires all applicable checks to pass.
+**CI rollout boundary:** `Documentation integrity` and `Contribution policy` are the new workflow's actual job names. They are not yet registered as required ruleset checks. PR #1 has been merged, but the CI bootstrap in [PR #4](https://github.com/RIOne1/HikingProject/pull/4) is still awaiting human review and merge, so `main` does not yet contain this workflow. After that merge, verify runs on `main` and a subsequent PR, then add those exact GitHub Actions checks to `protect-main` under [Issue #5](https://github.com/RIOne1/HikingProject/issues/5), preserving the existing approval requirements. Team policy already requires applicable checks to pass; technical CI enforcement remains a pending setup step.
 
 Public repositories can use these protections on GitHub Free; private personal repositories need an eligible plan such as Pro. Verify existing entitlement first. Do not change visibility or buy a plan merely to bypass the free-development constraint. Resolve an unavailable enforcement path with the owner; do not claim the policy is technically enforced. Owners can still edit repository settings, so policy also prohibits weakening them to merge one's own work.
 
