@@ -19,9 +19,9 @@ English MVP is authoritative. If documents conflict materially, identify the con
 
 ## Before editing
 
-1. Identify the assigned purpose, affected requirements, files and verification approach.
+1. Identify the assigned purpose, affected requirements, files and verification approach. Before creating a task branch or editing files, create the assigned task's tracking Issue in this repository or verify an existing open Issue that covers it. Record the scope, acceptance criteria and verification approach; do not invent an Issue number or substitute a PR number or MVP ID.
 2. Check the branch and working tree. Preserve unrelated edits and untracked files, including work from other agents or members. Do not reset, clean or stash them to obtain a clean tree.
-3. Work on a purpose-named task branch, never directly on `main`. Use `feature/...`, `fix/...`, `docs/...` or another allowed type. Never use `codex/...`, `chatgpt/...`, `claude/...`, `ai/...` or a person's name as the namespace.
+3. Work on a branch named `<type>/<issue-number>-<kebab-case-description>`, never directly on `main`. The number MUST match the primary tracking Issue. Use an allowed type such as `feature`, `fix` or `docs`; never use `codex`, `chatgpt`, `claude`, `ai` or a person's name as the namespace. The sole historical adoption case is recorded in CONTRIBUTING.md section 2; do not extend it to new work.
 4. Inspect actual code and available commands before choosing an implementation. Do not invent a project, scheme, test suite, service or credential that is not present.
 
 ## Implementation boundaries
@@ -44,7 +44,9 @@ English MVP is authoritative. If documents conflict materially, identify the con
 
 ## Git and human handoff
 
-Within an explicitly assigned task, an agent may create a compliant branch, edit, validate, commit, push that task branch and open a Draft PR. Stage only task-owned changes; do not silently include pre-existing edits. Commits and PR titles use the Conventional Commits rules in CONTRIBUTING.md.
+Within an explicitly assigned task, an agent may create its tracking Issue, create a compliant branch, edit, validate, commit, push that task branch and open a Draft PR. Every PR, including a draft, MUST link the same primary Issue; use `Closes #N` for completed scope or `Refs #N` with remaining work explained. The primary Issue cannot be `N/A`. Stage only task-owned changes; do not silently include pre-existing edits. Commits and PR titles use the Conventional Commits rules in CONTRIBUTING.md.
+
+An agent may mark a Draft PR ready for review only when the responsible human explicitly requests it. This is a status change, not evidence of completed human inspection or approval, and does not authorize merging.
 
 Open a PR under the responsible human's own authorized GitHub user account. If the available tool only creates bot-authored PRs, prepare the draft for the human to open; do not invent an exception to the human-author merge rule.
 

@@ -10,6 +10,8 @@ HikingProject is in private, pre-release development. There is no public release
 
 While the project is private, team members should first agree a private communication channel with the repository maintainer without disclosing sensitive details in the request. Keep vulnerability details, exploit material, tokens, exact personal locations and private GPX files out of public Issues, PRs and discussions.
 
+Security work also needs a tracking Issue before repository edits, as required by [CONTRIBUTING.md](CONTRIBUTING.md). Keep that Issue and the linked PR description sanitized; record only a non-sensitive scope and acceptance criteria, and keep confidential details in the agreed private channel.
+
 Before public app release, the maintainer MUST complete a confidential reporting setup. Choose the repository-publication sequence explicitly:
 
 1. While the repository is private, choose the reporting method and responsible humans. If a working channel is required before any source becomes public, configure another genuinely usable confidential method first.

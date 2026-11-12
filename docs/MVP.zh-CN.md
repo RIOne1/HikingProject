@@ -155,7 +155,7 @@
 
 ## 7. 证据与维护
 
-- PR 和验证记录关联受影响的 `MVP-XX` 编号。
+- 修改仓库前，按 [CONTRIBUTING.md](../CONTRIBUTING.md) 创建或确认跟踪 Issue；任务分支名包含其编号，每个 PR 必须关联同一个 Issue。PR 和验证记录还应关联受影响的 `MVP-XX` 编号；需求编号不能代替 Issue 编号。
 - 在同一个 PR 中保持中英需求一致。翻译有歧义时，依据英文版解决，并修正中文镜像。
 - [归档研究](research/2026-11-06-user-feedback/Hiking_App_User_Feedback_Research_ZH_2026-11-06.pdf)是有明确日期的桌面研究，不代表已完成用户验证或已实现功能。
 - 平台参考：[Mapbox 离线地图](https://docs.mapbox.com/ios/maps/guides/offline/)、[Mapbox 试用](https://docs.mapbox.com/accounts/guides/signup/)、[Mapbox 计费](https://docs.mapbox.com/accounts/guides/invoices/)、[Apple 后台定位](https://developer.apple.com/documentation/corelocation/handling-location-updates-in-the-background)、[GRDB](https://github.com/groue/GRDB.swift)。

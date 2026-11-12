@@ -8,7 +8,8 @@
 ## Scope and review focus
 
 - MVP requirement(s): <!-- MVP-XX, or explain cross-cutting/documentation scope. -->
-- Related Issue: <!-- Link if one exists; otherwise N/A. -->
+- Primary Issue (required): <!-- Link the real tracking Issue in this repository; its number must match the branch. N/A is not allowed. -->
+- Issue relationship: <!-- Use Closes #N for completed scope, or Refs #N and explain remaining work for partial scope. -->
 - Changes and files to focus on:
 - Contributors to this PR: <!-- All human authors/co-authors/contributors, not only the person who pushed. -->
 
@@ -39,6 +40,7 @@
 
 ## Author checklist
 
+- [ ] The primary Issue existed before work began, the branch uses `<type>/<issue-number>-<description>`, and this PR links that same Issue.
 - [ ] The branch describes the work, the title follows the commit convention, and the PR targets `main`.
 - [ ] The submitting human has inspected the entire diff and the scope matches the linked requirements.
 - [ ] Verification and limitations above are accurate; missing required checks are not presented as passed.
@@ -48,6 +50,7 @@
 
 ## Merge requirements
 
+- **Issue and branch match:** the primary Issue is required, predates the work and matches the branch number and PR scope. Link it in the PR description; use `Closes #N` only for completed scope. CONTRIBUTING.md records the sole historical adoption case for PR #1.
 - **Current revision approved:** at least one authorized human with repository write access or higher, other than the PR author, must approve the current revision in GitHub.
 - **Contributors may review:** another member may approve even if they authored/co-authored commits or pushed the latest changes. They must review the whole current diff and verification evidence. The PR author cannot self-approve.
 - **New commit means new review:** after every new commit, obtain fresh non-author human review and approval, including when the reviewer pushed it. An earlier approval does not cover the new revision.

@@ -8,10 +8,12 @@ A planned native iPhone app for beginner-to-intermediate half-day and full-day h
 | --- | --- |
 | [MVP](docs/MVP.md) | Authoritative English scope, requirement IDs, architecture and acceptance gates |
 | [MVP 中文镜像](docs/MVP.zh-CN.md) | Matching Chinese version; update alongside meaningful English changes |
-| [CONTRIBUTING](CONTRIBUTING.md) | Branches, commits, PR evidence, non-author human review and merge rules |
+| [CONTRIBUTING](CONTRIBUTING.md) | Issue-first work, numbered branches, commits, PR evidence, non-author human review and merge rules |
 | [AGENTS](AGENTS.md) | Instructions and task routing for AI-assisted development |
 | [SECURITY](SECURITY.md) | Private data, tokens, imports, vulnerability reporting and release gates |
 | [PR template](.github/pull_request_template.md) | A concise structure for reviewable changes and honest verification evidence |
+
+Before starting repository changes, create or confirm the task's tracking Issue, then use a branch named `<type>/<issue-number>-<kebab-case-description>`. Every PR, including a draft, must link that same primary Issue. See [the workflow and its one-time adoption record](CONTRIBUTING.md#2-issues-and-branches).
 
 ## Agreed product baseline
 

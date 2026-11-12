@@ -18,35 +18,40 @@ Every contributor MUST ensure their AI tool receives the applicable repository i
 - These rules have no self-approval, administrator, emergency or documentation-only bypass. An available GitHub merge button does not establish policy compliance.
 - Existing commit history is not rewritten just to conform to a newly adopted naming convention.
 
-## 2. Branches
+## 2. Issues and branches
 
-Start each task from the latest `main` on a short-lived branch. Inspect the working tree first; preserve unrelated work. Do not switch, reset, clean or stash someone else's changes to make a task convenient. Keep one coherent purpose per branch and PR. Do not reuse a branch after its PR is merged.
+Before creating a task branch or starting repository changes, contributors MUST create a tracking Issue in this repository, or use an existing open Issue that covers the assigned work. This includes code, documentation, configuration, tests and security fixes. Read-only investigation may inform the Issue; implementation and file edits must wait until the Issue exists. Record the problem, scope, acceptance criteria and verification approach. Follow [SECURITY.md](SECURITY.md) when an Issue concerns sensitive work.
 
-Branch format:
+Choose one primary Issue for each branch and PR. Its real GitHub Issue number MUST appear in the branch name and PR description; a PR number or `MVP-XX` requirement ID is not a substitute. Do not invent a number or open a duplicate Issue just to obtain one. Additional related Issues may be linked separately.
+
+After the Issue exists, start the task from the latest `main` on a short-lived branch. Inspect the working tree first; preserve unrelated work. Do not switch, reset, clean or stash someone else's changes to make a task convenient. Keep one coherent purpose per branch and PR. Do not reuse a branch after its PR is merged.
+
+Required branch format:
 
 ```text
-<type>/<kebab-case-description>
 <type>/<issue-number>-<kebab-case-description>
 ```
 
-Use lowercase ASCII words and hyphens. An Issue number is optional; link an existing Issue when relevant. The description MUST identify the work rather than the person or tool performing it.
+Use the positive numeric Issue number without `#`, lowercase ASCII words and hyphens. The description MUST identify the work rather than the person or tool performing it. The following numbers illustrate the format; replace them with the actual primary Issue number before creating a branch.
 
 | Branch type | Purpose | Example |
 | --- | --- | --- |
 | `feature` | New product behaviour | `feature/12-offline-map-download` |
-| `fix` | Correct existing behaviour | `fix/gpx-time-parsing` |
-| `docs` | Documentation | `docs/mvp-and-team-guidelines` |
-| `refactor` | Restructure without an intended behaviour change | `refactor/location-session-boundaries` |
-| `test` | Test coverage or fixtures | `test/track-migration-recovery` |
-| `chore` | Routine maintenance | `chore/research-directory-cleanup` |
-| `build` | Build/dependency configuration | `build/lock-mapbox-sdk-version` |
-| `ci` | CI configuration within the cost policy | `ci/document-checks` |
-| `perf` | Measured performance work | `perf/track-point-query-index` |
-| `revert` | Revert a defined change | `revert/catalogue-import-regression` |
+| `fix` | Correct existing behaviour | `fix/13-gpx-time-parsing` |
+| `docs` | Documentation | `docs/14-mvp-and-team-guidelines` |
+| `refactor` | Restructure without an intended behaviour change | `refactor/15-location-session-boundaries` |
+| `test` | Test coverage or fixtures | `test/16-track-migration-recovery` |
+| `chore` | Routine maintenance | `chore/17-research-directory-cleanup` |
+| `build` | Build/dependency configuration | `build/18-lock-mapbox-sdk-version` |
+| `ci` | CI configuration within the cost policy | `ci/19-document-checks` |
+| `perf` | Measured performance work | `perf/20-track-point-query-index` |
+| `revert` | Revert a defined change | `revert/21-catalogue-import-regression` |
 
 Do not use tool or person namespaces such as `codex/...`, `chatgpt/...`, `claude/...`, `ai/...` or a member's name as the prefix. A tool's default branch suggestion does not override this rule. Use `feature/` for a feature branch, not `feat/`; the commit type below remains `feat`.
 
 Do not push directly to `main`, force-push `main`, or delete it. AI agents must not force-push any branch. Humans must coordinate before rewriting a shared branch; a rewrite also invalidates previous approval.
+
+**One-time adoption record:** [PR #1](https://github.com/RIOne1/HikingProject/pull/1) and its `docs/mvp-and-team-guidelines` branch predate this requirement. At the owner's request to continue the same PR, that existing head is retained and linked to [Issue #2](https://github.com/RIOne1/HikingProject/issues/2), which was created before the follow-up policy edits. Renaming an open PR's head [closes the PR](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-branches-in-your-repository/renaming-a-branch). This adoption record applies only to PR #1's original branch name and earlier work; all new tasks and branches must follow the Issue-first rule. It does not waive any review or merge requirement.
 
 ## 3. Commit messages and PR titles
 
@@ -74,12 +79,12 @@ docs(mvp): clarify offline acceptance criteria
 
 ## 4. Work and PR preparation
 
-1. Identify the task, its affected `MVP-XX` requirements and relevant contracts. For cross-cutting work, explain the purpose rather than inventing an MVP ID or Issue.
-2. Read the current implementation, tests and nearest applicable instructions. Confirm the branch and preserve existing work.
+1. Create or confirm the primary tracking Issue before edits, with scope, acceptance criteria and verification approach. Identify affected `MVP-XX` requirements where applicable; cross-cutting work still needs an Issue but must not invent an MVP ID.
+2. Read the current implementation, tests and nearest applicable instructions. Create or confirm the branch with that Issue's number and preserve existing work.
 3. Implement a focused change. Keep important SQL parameterized, inspectable and explained. Schema changes need versioned migrations and representative recovery/migration evidence.
 4. Run relevant available checks, inspect the whole diff and report limitations. Do not fabricate commands, outputs, screenshots or completed tests.
-5. Open a Draft PR early when useful. An AI agent may prepare the draft under the assigned task; a human owner checks it and makes it ready for review.
-6. Use the [PR template](.github/pull_request_template.md). State the problem and resulting behaviour, review focus, testing evidence, contributors, AI use and relevant risk/impact. Mark inapplicable sections `N/A` with a short reason.
+5. Open a Draft PR early when useful. An AI agent may prepare the draft under the assigned task. The human owner decides when it is ready for review; an agent may perform that transition only on the owner's explicit request. Ready status does not establish human inspection, approval or permission to merge.
+6. Use the [PR template](.github/pull_request_template.md). State the problem and resulting behaviour, primary Issue, review focus, testing evidence, contributors, AI use and relevant risk/impact. Link the primary Issue in every PR, including drafts, and confirm its number matches the branch. Use `Closes #N` in the PR description when the PR fully addresses the Issue; for partial work, use `Refs #N` and identify remaining acceptance criteria. `Refs` is a reference, not an automatic-closing keyword. Other inapplicable sections may use `N/A` with a short reason; the primary Issue may not.
 7. Keep the title and description aligned with the final implementation. Remove abandoned plans and misleading statements as the PR evolves.
 
 All commits to a PR remain reviewable. Keep PRs small enough for another member to understand, but do not split a necessary migration or other inseparable change into misleading partial work.
@@ -96,7 +101,7 @@ Keep generated drafts, temporary files, local databases, tokens and build produc
 
 ## 5. AI-assisted development
 
-AI tools may read, implement, validate, create a purpose-named task branch, commit, push that task branch and open a Draft PR **within an explicitly assigned task**. That autonomy is not authority to take unrelated work, overwrite existing changes or expand the agreed product.
+AI tools may read, create the assigned task's tracking Issue, implement, validate, create a compliant Issue-numbered task branch, commit, push that task branch and open a Draft PR **within an explicitly assigned task**. They must create or verify the Issue before edits and include its number in the branch and PR. That autonomy is not authority to take unrelated work, overwrite existing changes or expand the agreed product.
 
 PRs MUST be opened under the responsible member's own GitHub user account, not a shared or bot account. An authorized agent may open the draft using that member's account. If a tool can only open bot-authored PRs, it must prepare the draft and hand it to the human to open instead; this workflow does not assign an alternative merger to a bot-authored PR.
 
@@ -121,6 +126,7 @@ After feedback, the author updates the PR, reruns affected checks, explains any 
 
 **The human PR author performs Squash and merge only after:**
 
+- The PR links its primary Issue, the branch carries that Issue's number, and the diff matches the Issue's scope and declared completion status, subject only to the specific adoption record in section 2.
 - At least one eligible non-author human has approved the current revision in GitHub.
 - All applicable required checks pass and the relevant local/manual evidence is recorded; no unresolved blocking limitation is disguised as `N/A`.
 - Review conversations and blocking change requests are resolved.
@@ -143,8 +149,8 @@ The repository owner must configure and verify the following before declaring th
 - Keep automated merging disabled and delete merged task branches.
 - Verify the configured behaviour using a harmless test PR before marking this setup complete.
 
-The required separation is between the PR author and the human approver; this policy does not exclude other contributors or commit co-authors. Before merging, the human author must verify the approver's eligibility and that approval covers the current revision. A green merge button or checklist is not a substitute for these checks.
+The required separation is between the PR author and the human approver; this policy does not exclude other contributors or commit co-authors. Before merging, the human author must verify the approver's eligibility and that approval covers the current revision. Humans must also check Issue creation order, branch numbering and the PR's Issue association; no automated check for those rules is currently installed. A green merge button or checklist is not a substitute for these checks.
 
 Public repositories can use these protections on GitHub Free; private personal repositories need an eligible plan such as Pro. Verify existing entitlement first. Do not change visibility or buy a plan merely to bypass the free-development constraint. Resolve an unavailable enforcement path with the owner; do not claim the policy is technically enforced. Owners can still edit repository settings, so policy also prohibits weakening them to merge one's own work.
 
-References: [protected branches](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches), [ruleset review settings](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets), [squash configuration](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/configuring-commit-squashing-for-pull-requests), [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).
+References: [Issue/PR linking](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue), [protected branches](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches), [ruleset review settings](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets), [squash configuration](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/configuring-commit-squashing-for-pull-requests), [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).

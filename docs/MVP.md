@@ -155,7 +155,7 @@ In addition to development acceptance:
 
 ## 7. Evidence and maintenance
 
-- Link PRs and validation records to the affected `MVP-XX` IDs.
+- Before repository changes, create or confirm a tracking Issue under [CONTRIBUTING.md](../CONTRIBUTING.md); include its number in the task branch and link the same Issue in every PR. Also link PRs and validation records to the affected `MVP-XX` IDs; requirement IDs do not replace Issue numbers.
 - Keep the English and Chinese requirements aligned in the same PR. Where a translation is ambiguous, resolve it against this English version and correct the mirror.
 - The [archived research](research/2026-11-06-user-feedback/Hiking_App_User_Feedback_Research_ZH_2026-11-06.pdf) is a dated desktop study, not completed user validation or a specification of implemented features.
 - Platform references: [Mapbox offline maps](https://docs.mapbox.com/ios/maps/guides/offline/), [Mapbox trial](https://docs.mapbox.com/accounts/guides/signup/), [Mapbox billing](https://docs.mapbox.com/accounts/guides/invoices/), [Apple background location](https://developer.apple.com/documentation/corelocation/handling-location-updates-in-the-background), [GRDB](https://github.com/groue/GRDB.swift).
