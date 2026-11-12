@@ -89,6 +89,13 @@ docs(mvp): clarify offline acceptance criteria
 
 All commits to a PR remain reviewable. Keep PRs small enough for another member to understand, but do not split a necessary migration or other inseparable change into misleading partial work.
 
+### Tests and CI belong with the change
+
+- Define verification in the primary Issue before implementation. Changes to business rules, SQL/migrations, imports, permissions or other behaviour with meaningful regression risk MUST include relevant automated tests in the same PR where that behaviour can be tested reliably. Bug fixes MUST include a regression test when reproducible in an automated test; explain when this is not practical. Test observable behaviour and failure cases, not a copy of the implementation.
+- New or changed automated checks MUST run in the applicable PR CI. If the existing workflow already discovers and runs them, no workflow edit is needed. Otherwise, update the test commands, discovery, triggers/path filters, dependencies or runner configuration in the same PR, as needed. Do not leave required CI integration to an unspecified later task.
+- The PR MUST identify the tests added/updated, the CI job that runs them and actual results. If no automated test or CI change is appropriate, explain why and provide suitable verification evidence. Prose-only and other low-impact changes do not require artificial unit tests or a new workflow.
+- Real-device, outdoor, background-location and battery checks remain necessary where applicable; CI cannot replace that evidence. If a check cannot run on the available free environment, record it as **Not run**, explain the blocker and identify any follow-up Issue. Required acceptance or merge checks remain blockers; a follow-up Issue does not waive them. Do not activate paid runners or silently substitute a different runner.
+
 ### Verification evidence
 
 For each meaningful check, give the exact command or manual scenario, environment/device/OS where relevant, result and remaining limitation. Distinguish **Passed**, **Failed**, **Not run** and **Not applicable**. A required check that was not run is not a pass. Fix relevant failures; do not weaken assertions or hide results to obtain a green status.

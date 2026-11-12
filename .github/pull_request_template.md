@@ -16,6 +16,8 @@
 
 ## Verification evidence
 
+- Tests and CI coverage: <!-- Tests added/updated and the CI job that runs them; say if existing discovery already covers them. Explain N/A, manual-only checks, blockers and any follow-up Issue. Required checks remain merge blockers. -->
+
 <!-- Give exact commands or manual scenarios. Do not invent commands for an app project that does not exist yet. -->
 <!-- Result: Passed / Failed / Not run (reason) / Not applicable (reason). Add rows only as needed. -->
 
@@ -45,6 +47,7 @@
 - [ ] The branch describes the work, the title follows the commit convention, and the PR targets `main`.
 - [ ] The submitting human has inspected the entire diff and the scope matches the linked requirements.
 - [ ] Verification and limitations above are accurate; missing required checks are not presented as passed.
+- [ ] Required tests and CI integration are included in this PR; existing coverage or a justified N/A is explained above, with manual evidence where applicable.
 - [ ] The repository checks pass for this revision; any missing run or failure is explained above and remains a merge blocker.
 - [ ] Relevant documentation and both MVP versions are aligned, or the reason for N/A is stated.
 - [ ] The change contains no live credentials, unauthorized private data, local databases or accidental generated artifacts.

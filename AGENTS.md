@@ -36,6 +36,8 @@ English MVP is authoritative. If documents conflict materially, identify the con
 
 ## Verify honestly
 
+- Plan tests with implementation using [Tests and CI belong with the change](CONTRIBUTING.md#tests-and-ci-belong-with-the-change). Add meaningful automated tests and bug-regression coverage in the same PR where required; do not treat testing as an unspecified later task.
+- Confirm that applicable PR CI actually discovers and runs the new/changed checks. Update the workflow in the same PR only when needed; report the covering job and results. For unavailable checks, record the blocker and any follow-up Issue without waiving required acceptance or merge gates or enabling paid infrastructure.
 - Run checks appropriate to the actual change. Prefer meaningful focused checks; do not write tests that merely mirror the implementation or demand an app build for a prose-only edit.
 - Report exact commands/scenarios, results and limitations. Never invent test output, a successful build, a device test or an approval. Do not weaken checks to manufacture a pass.
 - Offline, background-location, notification and battery claims need relevant real-device evidence. Preserve the difference between a planned check and a passed check.
