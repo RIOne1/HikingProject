@@ -5,6 +5,7 @@ body:
   - type: markdown
     attributes:
       value: |
+        Create this Issue before a fix. Use `<type>/<issue-number>-<description>` for its branch and link this same Issue in the PR.
         For vulnerabilities, use the private reporting link in the Issue chooser. Use synthetic data and redact logs/screenshots; never attach credentials or personal tracks.
   - type: textarea
     id: behaviour

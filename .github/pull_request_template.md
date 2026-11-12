@@ -9,7 +9,7 @@
 
 - MVP requirement(s): <!-- MVP-XX, or explain cross-cutting/documentation scope. -->
 - Primary Issue (required): <!-- Use #N or [#N](https://github.com/RIOne1/HikingProject/issues/N). Match the branch number; N/A is not allowed. -->
-- Issue relationship: <!-- Use Closes #N for completed scope, or Refs #N and explain remaining work for partial scope. -->
+- Issue relationship: <!-- Fill this field once, on this line: Closes #N for completed scope, or Refs #N and explain remaining work. Put additional related Issues elsewhere. -->
 - Changes and files to focus on:
 - Dependencies on open PRs: <!-- N/A, or link the prerequisite PR and identify the incremental diff; target main and explain merge order. -->
 - Contributors to this PR: <!-- All human authors/co-authors/contributors, not only the person who pushed. -->

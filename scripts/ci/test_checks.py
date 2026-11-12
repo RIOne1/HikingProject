@@ -65,6 +65,25 @@ class ContributionTests(unittest.TestCase):
         )
         self.assertEqual(validate(self.event, self.issue), [])
 
+    def test_duplicate_and_multiline_issue_fields_fail(self):
+        for suffix in [
+            "Closes #3\n- Issue relationship: Closes #4",
+            "Closes #3\n- Issue relationship: N/A",
+            "Closes #3\n- Issue relationship:",
+            "\nCloses #3",
+        ]:
+            with self.subTest(suffix=suffix):
+                self.event["pull_request"]["body"] = (
+                    "- Primary Issue (required): #3\n- Issue relationship: " + suffix + "\n"
+                )
+                self.assertTrue(validate(self.event, self.issue))
+        for body in [
+            "- Primary Issue (required):\n#3\n",
+            "- Primary Issue (required): #3\n- Primary Issue (required):\n",
+        ]:
+            with self.subTest(body=body), self.assertRaises(ValueError):
+                primary_issue(body, "RIOne1/HikingProject")
+
     def test_legacy_exception_cannot_be_reused(self):
         self.event["pull_request"]["head"]["ref"] = "docs/mvp-and-team-guidelines"
         self.assertTrue(validate(self.event, self.issue))

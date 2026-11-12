@@ -24,6 +24,14 @@ Dependabot can propose security-update PRs when supported dependency data exists
 
 No paid scanner, AI scan or agentic autofix was activated. CodeQL/app scanning is deferred until useful supported application code and a verified free workflow exist. Reassess feature eligibility and costs before changing repository visibility or automation. The settings described here are a dated observation, not a guarantee they cannot drift.
 
+## Self-hosted CI
+
+Repository checks use the Linux runner label `hikingproject-local-ci` with no fallback to GitHub-hosted runners. The owner controls the runner host and must keep its software updated. Use a dedicated unprivileged environment without personal files, SSH keys, cloud credentials, signing material or a mounted Docker socket. Restrict access to the host and private network; a persistent container is not equivalent to a fresh isolated machine for every job.
+
+GitHub recommends avoiding self-hosted runners for public repositories because PR workflows can execute hostile code. This repository therefore requires approval for **all external contributors**, and maintainers MUST NOT approve fork-origin workflow runs on this runner. Review external changes before copying them onto a normal Issue-numbered branch in this repository. The workflow's same-repository condition is an additional filter, **not a security boundary**: a PR can modify workflow code. A skipped fork check is not evidence that the contribution passed validation. See [GitHub's self-hosted runner guidance](https://docs.github.com/en/actions/reference/security/secure-use#hardening-for-self-hosted-runners).
+
+Keep the workflow token read-only and checkout credentials unpersisted. Do not expose runner registration tokens in Issues, PRs or logs. If the host is suspected to be compromised, stop its runner and have the owner rebuild the environment and rotate affected credentials before reconnecting it. Passing CI establishes the tested repository behaviour; it does not audit the PC's isolation, reboot recovery or continuous availability.
+
 ## Secrets and Mapbox access
 
 - Do not commit live tokens, credentials, signing material, personal configuration or secrets in source, examples, screenshots, reports or PR text. Use placeholder examples and appropriate local configuration.
@@ -54,6 +62,6 @@ No paid scanner, AI scan or agentic autofix was activated. CodeQL/app scanning i
 
 Use reviewed dependencies and stable, recorded versions. Check upstream provenance, licenses, required permissions and relevant advisories. New runtime dependencies, permissions, SQL/schema changes, imports, storage protection and sharing behaviour must be made explicit in the PR.
 
-Do not disable validation or security checks just to make a build pass. Use free local tools and existing authorized checks; adding a scanner or CI service does not authorize payment. No paid scanner or external security-reporting integration is currently promised or configured.
+Do not disable validation or security checks just to make a build pass. Use free local tools and existing authorized checks; adding a scanner or CI service does not authorize payment. The free GitHub controls and private reporting channel listed above are configured; no paid scanner or third-party reporting service is included.
 
 Security fixes still require a non-author human reviewer under [CONTRIBUTING.md](CONTRIBUTING.md) and the normal merge procedure; other contributors may review. When public detail would expose an unresolved vulnerability, coordinate the confidential review method with the maintainer before posting a normal public PR.

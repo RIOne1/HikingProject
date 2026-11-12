@@ -24,7 +24,7 @@ def valid_subject(subject):
 
 
 def primary_issue(body, repository):
-    fields = re.findall(r"^- Primary Issue \(required\):\s*([^\n]+)$", prose(body), re.M)
+    fields = re.findall(r"^- Primary Issue \(required\):[ \t]*([^\n]*)$", prose(body), re.M)
     if len(fields) != 1:
         raise ValueError("Use exactly one visible '- Primary Issue (required): #N' field.")
     value = fields[0].strip().removesuffix(".")
@@ -53,8 +53,11 @@ def validate(event, issue):
     match = BRANCH.fullmatch(branch)
     if not legacy and (not match or int(match[1]) != number):
         errors.append("Branch must use an allowed type and the same primary Issue number.")
-    relationship = re.findall(r"^- Issue relationship:\s*(Closes|Refs) #([1-9][0-9]*)(?:\s+.*)?$", prose(pr.get("body") or ""), re.M)
-    if len(relationship) != 1 or int(relationship[0][1]) != number:
+    # Count every field, including empty/invalid ones. Whitespace must not consume
+    # the next line and hide a second, conflicting Issue relationship.
+    relationships = re.findall(r"^- Issue relationship:[ \t]*([^\n]*)$", prose(pr.get("body") or ""), re.M)
+    relationship = re.fullmatch(r"(Closes|Refs) #([1-9][0-9]*)(?:[ \t]+.*)?", relationships[0].strip()) if len(relationships) == 1 else None
+    if not relationship or int(relationship[2]) != number:
         errors.append("Use one visible '- Issue relationship: Closes #N' or 'Refs #N' matching the primary Issue.")
     if issue.get("number") != number or "pull_request" in issue:
         errors.append("The primary number must identify an Issue, not a pull request.")
