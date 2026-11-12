@@ -2,6 +2,8 @@
 
 Recorded **13 November 2026 (Pacific/Auckland)** for [Issue #7](https://github.com/RIOne1/HikingProject/issues/7), branch `build/7-mobile-web-foundation`. These results apply to the bootstrap scope and synthetic fixtures. They do not mark any MVP requirement accepted. Commands below ran from the repository root unless stated otherwise; logs and Xcode results are local ignored files under `tmp/foundation/` and `tmp/review8/`.
 
+**Scope note, 13 November 2026:** [PR #8](https://github.com/RIOne1/HikingProject/pull/8) is merged. [Issue #9](https://github.com/RIOne1/HikingProject/issues/9) expands the approved specification to Web/mobile planning, local Supabase accounts, sync and moderated publication. The historical results below are unchanged and do not validate these additions. In particular, there is no graph/routing, GL JS, PostgreSQL/Auth/RLS, publication or deletion implementation/test evidence in this record. Use [MVP verification gates](../MVP.md#6-verification-and-definition-of-done) for the new target.
+
 ## Initial local evidence
 
 | Check | Environment | Result |
@@ -41,7 +43,7 @@ The workflow runs Web and portable Swift tests inside the existing required `Doc
 
 The `HikingProject-PC` logs confirm Node 24.20.0, 13 passing Web tests with lint/typecheck/build, native-prerequisite and Swift setup success, and Swift 6.2.1 targeting `x86_64-unknown-linux-gnu`. The exact command `swift test --scratch-path .build/ci --disable-automatic-resolution --jobs 2` built the portable package and passed all 8 Swift Testing functions, including the 4 numeric-validation cases, SQLite persistence, SQL binding and failed-write rollback. These tests ran rather than being skipped.
 
-The earlier missing-tool failure is resolved. Keep the [documented image prerequisites](CI.md#ubuntu-2404-image-preparation) when rebuilding the runner. This evidence records the verified revision; the PR's checks track subsequent commits, which must also pass before merge. Human inspection and non-author approval remain merge gates. The owner's follow-up instruction authorizes marking PR #8 ready once its current checks pass; it does not authorize merging.
+The earlier missing-tool failure is resolved. Keep the [documented image prerequisites](CI.md#ubuntu-2404-image-preparation) when rebuilding the runner. This evidence records the verified revision; subsequent PR commits required their own passing checks and non-author human approval. At that time the owner authorized marking PR #8 ready after its current checks passed, without authorizing the agent to merge. That historical instruction grants no ready/merge authorization for later PRs.
 
 Not run / not implemented: real-device installation, iOS 18 runtime coverage, token-enabled map rendering, offline packs, SDK telemetry/privacy behaviour, location permissions, foreground/background recording, notification delivery, battery endurance, GPX import/export, genuine route geometry/provenance, earlier-version schema upgrades, abrupt process interruption and App Store distribution. These remain their feature/product/release gates, not claims established by a sample catalogue. No paid service, Apple enrollment, Mapbox account activation, hosted runner or deployment was performed.
 

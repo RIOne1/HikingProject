@@ -1,8 +1,8 @@
-# Shared catalogue and SQL guide
+# Shared data and SQL guide
 
 ## Foundation contract
 
-The single [sample catalogue](../../shared/fixtures/catalogue.sample.json) is bundled by the Swift `HikingSampleData` target and imported by React. Its [JSON Schema](../../shared/catalogue.schema.json) describes **schemaVersion 1**, a metadata-only development contract. These fictional entries are not source-verified routes, and their coordinates are synthetic test points. This is not yet the complete GeoJSON + JSON delivery format required by MVP-10.
+The single [sample catalogue](../../shared/fixtures/catalogue.sample.json) is bundled by the Swift `HikingSampleData` target and imported by React. Its [JSON Schema](../../shared/catalogue.schema.json) describes **schemaVersion 1**, a metadata-only development contract. These fictional entries are not source-verified routes, and their coordinates are synthetic test points. This is not the network/route revision contract required by MVP-10. Issue #9 changes documentation only; it does not change schema v1, fixtures, SQL or decoders.
 
 | Field | Meaning / validation |
 | --- | --- |
@@ -35,3 +35,31 @@ Once shared, preserve existing migration identifiers and SQL; append a new migra
 The Swift tests cover decoding/ranges/version rejection, persistence across reopening, repeated migration application, text bound as a SQL value, and rollback after an injected SQLite trigger failure. The rollback test causes an actual database write failure after deletion, rather than only checking pre-validation rejection. Tests use temporary isolated databases and remove only their own temporary files.
 
 This first schema has no earlier production schema to upgrade. It does not establish migration from a populated earlier version, abrupt process interruption, storage exhaustion or trip recovery. Add representative earlier-schema fixtures and preservation tests when the next migration is introduced. The full MVP-09 gate remains open.
+
+## Planned network and route contract
+
+The following are logical responsibilities to resolve in implementation Issues, **not tables, fields or APIs already present**. Keep local SQLite and server PostgreSQL migrations separate. Use Supabase SDKs plus explicit SQL/RLS for server access; no Prisma. Add only the structures needed by the assigned increment, with reviewed units, constraints and compatibility behaviour.
+
+| Concept | Required meaning |
+| --- | --- |
+| Checked network | Stable node/edge identity and connectivity, geometry, source/version, attribution and checked access conditions; visual crossings alone do not imply a junction |
+| Selected route parts | Ordered edge references, traversal direction and partial-edge boundaries with defined units/convention; preserve repetitions. Confirmed connectors are identifiable and never replace selected portions silently |
+| Route and immutable revision | Separate stable route identity from a saved geometry/selection snapshot and its source-network version. Editing creates a revision; updates do not silently rewrite downloaded or submitted geometry |
+| Ownership | Stable Auth user ID for private cloud records, independent of mutable email and map vendor IDs; distinguish guest-local records from account-owned plans |
+| Local trip | Ordered points, time, quality, gaps and the followed revision where known; separate from map cache, catalogue replacement and publication evidence |
+| Submission and evidence | Owner-selected route-relevant App-recorded portion plus feedback, bound to the exact revision; private review access and explicit decision/completion state |
+| Status/report | Provenance, observation/update time, affected segments/revisions and verification state; status can change without rewriting geometry. Expired closure data does not mean open |
+| Offline pack and sync | Exact revision/coverage, readiness and last-known status; complete replacement, retry/conflict handling and preservation of an existing usable snapshot |
+| Withdrawal/deletion | Stop server distribution and supply reconnect cleanup information without deleting independent user recordings; retention and active-hike handling require validation |
+
+GeoJSON geometry alone does not encode all these semantics. Agree the contract and representative fixtures with both clients before depending on them. Base-network changes must preserve old revision interpretation or make an incompatibility explicit; do not silently remap an old edge ID onto different geometry. Confirmed current closures still constrain new use of an older saved revision.
+
+## Planned verification cases
+
+- Test junctions, loops, out-and-back, repeated edges, partial edges and disconnection against the same expected ordered selections in Swift/Web. Freeze coordinate/partial-boundary conventions in the contract PR rather than guessing them in each UI.
+- Demonstrate Web-save → iPhone-fetch and mobile-save/reopen equality, stale-edit conflicts and retried/interrupted writes. Repeated writes must not duplicate a logical route or expose a partial revision.
+- Test SQLite and PostgreSQL migrations with relevant earlier data, failed writes and ownership constraints. Query/index decisions must follow actual access patterns; important SQL and non-obvious constraints need explanations.
+- Exercise RLS through anonymous, two-user and administrator sessions, including denied private-plan/evidence access, prohibited role changes and unauthorized publication. Passing tests with a privileged service key cannot establish client RLS correctness.
+- Verify completion-state/evidence binding, geometry revision review, closures and withdrawal/reconnect behaviour, preserving independent trip history. Quantitative completion thresholds remain pilot-validation work; a GPS record is not unforgeable proof.
+
+These are future acceptance cases, not existing test results. The [backend guide](BACKEND.md) covers local service preparation and the [foundation record](FOUNDATION-VALIDATION.md) preserves the narrower evidence that exists today.

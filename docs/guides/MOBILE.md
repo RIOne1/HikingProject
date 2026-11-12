@@ -15,6 +15,8 @@ Open [HikingProject.xcodeproj](../../apps/mobile/HikingProject.xcodeproj/) and s
 
 Core Location is an Apple framework used here only for the map camera coordinate. There is no location request, background mode, recording service or notification permission in the foundation. Add capabilities and permission explanations with the feature that needs them and test refusal paths. Foundation XML processing and URLSession need no third-party package; GPX and content downloading remain future implementation.
 
+The expanded MVP also adds online predeparture route combination, private-plan sync and evidence submission. None is implemented here, and no Supabase SDK/Auth flow is installed. The build commands below continue to verify the existing foundation, not these future features.
+
 ## Build and test
 
 From the repository root, resolve and test the portable core:
@@ -69,3 +71,13 @@ The generated app plist binds its version fields to `MARKETING_VERSION` and `CUR
 ## SQL and future features
 
 `CatalogueModel` selects the app's Application Support location and seeds `foundation.sqlite` only when the catalogue is empty. `RouteStore` owns migrations and SQL; the Mapbox adapter never owns the database. See [data guide](DATA.md) before changing schema or catalogue semantics. Add recording models and point storage only with their real requirements, tests and failure/recovery design; do not treat this sample catalogue table as a trip-history schema.
+
+## Planned hiking workflow
+
+- While online and before departure, combine a selected route with nearby routes using the checked network. Preserve all selected parts, direction/order and repetitions; preview and confirm connectors. Reject disconnected/closed combinations instead of shortening them. Mobile does not need Web's precision editor.
+- Fetch or save the exact private plan revision and prepare a complete local snapshot plus map pack. Geometry must not change silently after server/network edits. Show last-known status; a confirmed closure blocks starting new planned navigation, but must not forcibly stop an ongoing hike or independent recording.
+- Keep saved-line navigation/progress and locally calculated off-route alerts independent of authentication and online routing. Guests and expired sessions retain existing offline use. Mid-hike/offline combination, automatic rerouting and turn-by-turn voice guidance remain deferred.
+- Preserve private unverified GPX import/navigation and GPX export. Imported files are not checked-network data or sufficient publication evidence. Store raw recordings locally; only deliberately selected route-relevant App-recorded evidence plus feedback is submitted privately for review.
+- Implement account-scoped caches/session handling without cross-user exposure or loss of local recordings. Withdrawal reconnect processing must distinguish saved public content from the user's own trip history and active hike. Define and validate cleanup timing before external users.
+
+Use MVP-02 through MVP-12 and MVP-14 through MVP-20 for complete conditions. Add relevant SQL/logic tests and local Xcode checks with implementation; real-device evidence is still required for offline/background/lock-screen/battery claims. See [Backend](BACKEND.md) for planned identity/data boundaries and [CI](CI.md) for what the Linux runner can actually verify.

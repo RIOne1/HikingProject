@@ -37,3 +37,11 @@ This combines the official Ubuntu 24.04 prerequisites with this action's `file` 
 No GitHub-hosted runner, artifact upload, Actions cache, paid scanner, deployment or signing secret is configured. npm packages, Swift toolchains and SPM sources download to the local runner; disk/network use still belongs to that PC. The machine must remain available while jobs run. Package downloads can fail independently of application tests; report the actual failure rather than changing the checks to pass.
 
 Linux tests the portable catalogue/database library. It cannot build SwiftUI, link the iOS Mapbox SDK or run Xcode simulator tests. Contributors changing the app must provide local Mac evidence using [Mobile](MOBILE.md#build-and-test). This is the explicitly documented local iOS verification baseline, not automated iOS CI or outdoor/device acceptance.
+
+## Expanded MVP coverage to add with implementation
+
+Issue #9 updates the specification only; it does not modify this workflow, runner image or required check names. Existing green checks do not validate planning, PostgreSQL migrations, Supabase Auth/RLS, synchronization, publication or deletion. Follow [tests and CI delivery](../../CONTRIBUTING.md#tests-and-ci-belong-with-the-change): add meaningful tests and applicable CI integration with each feature, reusing existing discovery/jobs when appropriate.
+
+Pure selection/contract tests can run with the existing Web/Swift suites once implemented. Backend integration tests need real local database/Auth identities and denied-access cases; a mocked SDK or privileged SQL session alone cannot prove RLS. Document the exact reproducible command, versions, isolation and covering job in that implementation PR.
+
+The current runner itself runs in a Linux container on Windows. Local Supabase's container-based setup does not establish that `supabase start` is available or safe inside that runner. Validate a free isolated backend-test environment before choosing CI wiring. Do not mount the host Docker socket, run the runner as root, silently skip required backend checks or fall back to paid infrastructure. If unavailable, mark the affected checks Not run and keep their implementation/acceptance gate open; independent documentation and pure-logic work can continue.
