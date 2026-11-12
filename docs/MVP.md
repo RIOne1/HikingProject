@@ -151,7 +151,7 @@ In addition to development acceptance:
 - Configure and verify the GitHub review protections described in [CONTRIBUTING.md](../CONTRIBUTING.md); file-based policy alone does not enforce them.
 - Verify privacy disclosures against the implemented app and actual SDK behaviour.
 
-**Current state:** no iOS app project, application test suite or CI workflow has been established. The first app-bootstrap PR must document real targets, schemes and build/test commands after verifying them. Until then, do not present guessed commands or checked boxes as evidence.
+**Current state:** repository CI checks documentation integrity and contribution metadata; it does not establish application acceptance. No iOS app project or application test suite exists yet. The first app-bootstrap PR must document real targets, schemes and build/test commands after verifying them. Until then, do not present guessed commands or checked boxes as evidence. See [CONTRIBUTING.md](../CONTRIBUTING.md#verification-evidence) for the actual checks and their limits.
 
 ## 7. Evidence and maintenance
 

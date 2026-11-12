@@ -2,21 +2,15 @@
 
 These rules apply to every team member and every human-owned, AI-assisted contribution, including documentation and repository-policy changes. **MUST** is mandatory. **SHOULD** is the normal practice; explain a deviation in the PR. English is authoritative for governance files and PRs. [MVP.md](docs/MVP.md) is authoritative for product scope; its [Chinese mirror](docs/MVP.zh-CN.md) must be updated in the same PR when requirements change.
 
-Read [AGENTS.md](AGENTS.md) before using an AI coding agent and [SECURITY.md](SECURITY.md) before handling tokens, tracks, logs, imports or vulnerabilities.
-
-Every contributor MUST ensure their AI tool receives the applicable repository instructions; do not assume that every tool loads `AGENTS.md` automatically. Tool behaviour does not transfer the contributor's responsibility to the AI.
+This file is the source of team workflow rules. [AGENTS.md](AGENTS.md) adds AI execution guidance; the [PR template](.github/pull_request_template.md) collects evidence and summarizes merge gates. Give AI tools the applicable instructions rather than assuming they load them automatically. Read [SECURITY.md](SECURITY.md) for tokens, tracks, imports, logs and vulnerabilities.
 
 ## 1. Human accountability and non-author approval
 
-- Every change to `main` MUST go through a PR. This includes documentation, configuration, dependencies, data migrations and these rules.
-- A PR MUST receive at least **one eligible non-author human approval of its current revision** before merge.
-- An eligible approver is an authorized human reviewer with repository write access or higher who is not the PR author. Here, PR author means the person who opened the PR, not every commit author or contributor.
-- Other contributors, including commit authors/co-authors and the latest pusher, MAY provide the required approval. They MUST review the whole current diff and verification evidence, including changes they contributed. Record contributions truthfully; shared implementation does not require a third reviewer.
-- For example, if A opens a PR and both A and B contribute, B may review and approve the current revision, then A may squash-merge once all requirements are met. A cannot approve their own PR.
-- AI review, bot approval, a checklist tick, an emoji or an informal message does not replace a GitHub human approval. If no eligible non-author human is available, wait for one.
-- Any new commit after approval requires fresh non-author human review and approval, even if GitHub still displays an earlier approval. This also applies when the reviewer pushes the new commit. Resolve review conversations and blocking change requests before merge.
-- These rules have no self-approval, administrator, emergency or documentation-only bypass. An available GitHub merge button does not establish policy compliance.
-- Existing commit history is not rewritten just to conform to a newly adopted naming convention.
+- Every change to `main`, including documentation and these rules, MUST go through a PR with **at least one eligible non-author human approval of its current revision**.
+- The approver MUST have repository write access or higher and be someone other than the person who opened the PR. Commit authors/co-authors and the latest pusher MAY approve after reviewing the whole current diff and evidence, including their own changes; shared implementation does not require a third person.
+- Every new commit requires fresh non-author human review and approval, including a reviewer's push, even if GitHub retains an earlier approval.
+- AI/bot review, checklists and informal messages do not replace GitHub human approval. If no eligible approver is available, wait. There is no self-approval, administrator, emergency or documentation-only bypass.
+- Only the human PR author may squash-merge after the [merge gates](#6-review-and-merge) pass. An enabled merge button does not establish compliance.
 
 ## 2. Issues and branches
 
@@ -24,7 +18,7 @@ Before creating a task branch or starting repository changes, contributors MUST 
 
 Choose one primary Issue for each branch and PR. Its real GitHub Issue number MUST appear in the branch name and PR description; a PR number or `MVP-XX` requirement ID is not a substitute. Do not invent a number or open a duplicate Issue just to obtain one. Additional related Issues may be linked separately.
 
-After the Issue exists, start the task from the latest `main` on a short-lived branch. Inspect the working tree first; preserve unrelated work. Do not switch, reset, clean or stash someone else's changes to make a task convenient. Keep one coherent purpose per branch and PR. Do not reuse a branch after its PR is merged.
+After the Issue exists, start a short-lived task branch from the latest `main`. If work depends on an unmerged PR, verify `main`, branch from the documented prerequisite, target `main` and provide both the dependency and an incremental comparison. The human author must resolve merge order and review the complete resulting diff. Keep one coherent purpose per branch/PR and do not reuse a merged branch. Inspect the working tree first; do not switch, reset, clean or stash someone else's changes to make the task convenient.
 
 Required branch format:
 
@@ -49,9 +43,9 @@ Use the positive numeric Issue number without `#`, lowercase ASCII words and hyp
 
 Do not use tool or person namespaces such as `codex/...`, `chatgpt/...`, `claude/...`, `ai/...` or a member's name as the prefix. A tool's default branch suggestion does not override this rule. Use `feature/` for a feature branch, not `feat/`; the commit type below remains `feat`.
 
-Do not push directly to `main`, force-push `main`, or delete it. AI agents must not force-push any branch. Humans must coordinate before rewriting a shared branch; a rewrite also invalidates previous approval.
+Do not push directly to `main`, force-push `main`, or delete it. AI agents must not force-push any branch. Humans must coordinate before rewriting a shared branch; a rewrite also invalidates previous approval. Do not rewrite existing history just to adopt a new naming convention.
 
-**One-time adoption record:** [PR #1](https://github.com/RIOne1/HikingProject/pull/1) and its `docs/mvp-and-team-guidelines` branch predate this requirement. At the owner's request to continue the same PR, that existing head is retained and linked to [Issue #2](https://github.com/RIOne1/HikingProject/issues/2), which was created before the follow-up policy edits. Renaming an open PR's head [closes the PR](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-branches-in-your-repository/renaming-a-branch). This adoption record applies only to PR #1's original branch name and earlier work; all new tasks and branches must follow the Issue-first rule. It does not waive any review or merge requirement.
+**One-time adoption record:** [PR #1](https://github.com/RIOne1/HikingProject/pull/1) and its `docs/mvp-and-team-guidelines` branch predate this requirement. At the owner's request to continue the same PR, that head was retained and linked to [Issue #2](https://github.com/RIOne1/HikingProject/issues/2), which was created before the follow-up policy edits. PR #1 has since been merged. Renaming an open PR's head [closes the PR](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-branches-in-your-repository/renaming-a-branch). This adoption record applies only to PR #1's original branch name and earlier work; all new tasks and branches must follow the Issue-first rule. It does not waive any review or merge requirement.
 
 ## 3. Commit messages and PR titles
 
@@ -79,33 +73,51 @@ docs(mvp): clarify offline acceptance criteria
 
 ## 4. Work and PR preparation
 
-1. Create or confirm the primary tracking Issue before edits, with scope, acceptance criteria and verification approach. Identify affected `MVP-XX` requirements where applicable; cross-cutting work still needs an Issue but must not invent an MVP ID.
-2. Read the current implementation, tests and nearest applicable instructions. Create or confirm the branch with that Issue's number and preserve existing work.
-3. Implement a focused change. Keep important SQL parameterized, inspectable and explained. Schema changes need versioned migrations and representative recovery/migration evidence.
-4. Run relevant available checks, inspect the whole diff and report limitations. Do not fabricate commands, outputs, screenshots or completed tests.
-5. Open a Draft PR early when useful. An AI agent may prepare the draft under the assigned task. The human owner decides when it is ready for review; an agent may perform that transition only on the owner's explicit request. Ready status does not establish human inspection, approval or permission to merge.
-6. Use the [PR template](.github/pull_request_template.md). State the problem and resulting behaviour, primary Issue, review focus, testing evidence, contributors, AI use and relevant risk/impact. Link the primary Issue in every PR, including drafts, and confirm its number matches the branch. Use `Closes #N` in the PR description when the PR fully addresses the Issue; for partial work, use `Refs #N` and identify remaining acceptance criteria. `Refs` is a reference, not an automatic-closing keyword. Other inapplicable sections may use `N/A` with a short reason; the primary Issue may not.
-7. Keep the title and description aligned with the final implementation. Remove abandoned plans and misleading statements as the PR evolves.
+1. Follow the Issue/branch rules in section 2; identify affected `MVP-XX` requirements without inventing IDs for cross-cutting work. Read the current implementation, tests and applicable instructions.
+2. Implement a focused change. Keep SQL parameterized, inspectable and explained; schema changes need versioned migrations and representative recovery/migration evidence. Apply the tests and verification guidance below.
+3. Open a Draft PR early when useful. The human owner decides when it is ready for review; an agent may change that status only on the owner's explicit request. Ready status is not approval or permission to merge.
+4. Use the [PR template](.github/pull_request_template.md) for the result, review focus, evidence, contributors, AI use and relevant impacts. Keep required fields; group inapplicable impact categories under one reasoned `N/A` instead of repeating boilerplate. Drafts may record planned work and unchecked items honestly.
+5. Every PR MUST link its primary Issue and match the branch number. Fill `Primary Issue (required)` and `Issue relationship` once each, with values on the same line. Use `Closes #N` for completed Issue scope or `Refs #N` with remaining criteria explained; `Refs` does not auto-close an Issue. These fields cannot be `N/A`. List other related Issues separately.
+6. Keep the title, description and evidence aligned with the final change; remove abandoned plans and stale claims before requesting review.
 
 All commits to a PR remain reviewable. Keep PRs small enough for another member to understand, but do not split a necessary migration or other inseparable change into misleading partial work.
 
+### Tests and CI belong with the change
+
+- Changes with meaningful regression risk (such as business rules, SQL/migrations, imports or permissions) MUST include relevant automated tests in the same PR where reliable automation is practical. Bug fixes need an automated regression test when reproducible that way; otherwise explain the limitation and suitable verification. Test observable behaviour and failure cases, not a copy of the implementation.
+- Applicable PR CI MUST execute new/changed automated checks. Existing discovery needs no workflow edit; otherwise update commands, filters, dependencies or runner configuration in the same PR. Reuse existing jobs where suitable and justify extra jobs or tooling with a concrete requirement or risk. Do not defer required CI integration to an unspecified later task.
+- Identify the tests, covering CI job and results in the PR. If no automated test or CI change is appropriate, explain why; prose-only and other low-impact changes do not need artificial tests or a new workflow. Do not activate paid infrastructure or silently substitute runners.
+
 ### Verification evidence
 
-For each meaningful check, give the exact command or manual scenario, environment/device/OS where relevant, result and remaining limitation. Distinguish **Passed**, **Failed**, **Not run** and **Not applicable**. A required check that was not run is not a pass. Fix relevant failures; do not weaken assertions or hide results to obtain a green status.
+For each meaningful check, give the exact command or manual scenario, relevant environment/device/OS, result and limitations. Distinguish **Passed**, **Failed**, **Not run** (reason) and **Not applicable** (justification). Never fabricate evidence, weaken assertions or hide failures to obtain a green status.
 
-UI changes SHOULD include sanitized screenshots or a short recording. Location, offline-map, notification and long-running recording changes need relevant real-device evidence when applicable; a simulator or mocked service alone cannot prove outdoor/background reliability. Use synthetic or authorized fixtures rather than private tracks or home locations.
+Identify the gate each check supports. Missing or failed checks required for the current PR block merge. Product-acceptance and public-release checks block those milestones; they are not automatically required for unrelated documentation or incremental PRs. Record unavailable checks and any follow-up Issue without claiming the associated feature or milestone is complete. This distinction does not waive MVP or SECURITY requirements, and a follow-up Issue is not a substitute for a required check.
 
-**Current bootstrap state:** the repository has no iOS project, application test suite or CI workflow yet. Do not invent a scheme, target, `xcodebuild` command or `swift test` result. The app-bootstrap PR MUST add verified build/test instructions for the project it actually creates. For documentation-only changes, check meaning, bilingual parity, links and formatting; `git diff --check` is an existing formatting check. The research PDF generator is not an app test.
+UI changes SHOULD include sanitized screenshots or a short recording. Changes affecting location, offline-map, notification or long-running recording behaviour need relevant real-device evidence; CI, simulators and mocks alone cannot prove outdoor/background or battery claims. Use synthetic or authorized fixtures rather than private tracks or home locations.
+
+**Current bootstrap state:** the repository has no iOS project or application test suite yet. Repository CI exists for documentation and contribution checks only. Do not invent a scheme, target, `xcodebuild` command or `swift test` result. The app-bootstrap PR MUST add verified build/test instructions for the project it actually creates. For documentation-only changes, check meaning, bilingual parity, links and formatting; `git diff --check` is an existing formatting check. The research PDF generator is not an app test.
+
+The [Repository checks workflow](.github/workflows/repository-checks.yml) uses the dedicated self-hosted Linux runner labeled `hikingproject-local-ci`. It pins the checkout action to a full commit SHA, uses read-only permissions and limits each job to five minutes. It needs only Git and Python 3.10+ and uses no artifact uploads, caches or app secrets. It runs on pushes to `main` and on creation, updates and relevant metadata edits for PRs from branches in this repository. Manual dispatch becomes available after the workflow reaches `main`. Jobs wait for the local runner to reconnect when it is offline.
+
+Keep [fork workflow approval](https://github.com/RIOne1/HikingProject/settings/actions) set to require approval for all external contributors. Do not approve fork-origin workflow runs on this self-hosted runner. To run CI on an external contribution, review the proposed changes before bringing them onto a numbered branch in this repository.
+
+There is no automatic fallback to an official runner. Follow [SECURITY.md](SECURITY.md#self-hosted-ci) for host isolation and the limits of the fork filter. Linux checks do not build the iPhone app: later iOS build/simulator jobs require a separate [macOS/Xcode environment](https://developer.apple.com/xcode/system-requirements). The owner's self-hosting choice is not required to avoid a public-repository compute quota: [GitHub's billing documentation](https://docs.github.com/en/billing/concepts/product-billing/github-actions) states that standard hosted runners for public repositories and self-hosted runners are independently free; larger runners and storage have separate billing rules. Keep this workflow free of artifact uploads and caches.
+
+- **Documentation integrity:** checks local inline Markdown links/heading anchors, trailing whitespace, matching bilingual MVP requirement IDs/order, one acceptance block per requirement, validator regression cases and changed-file whitespace. Run `python3 scripts/ci/check_docs.py`, `python3 -m unittest discover -s scripts/ci -p 'test_*.py' -v` and `git diff --check` locally with Python 3.10+ and Git. CI uses `git diff --check HEAD^ HEAD` to inspect committed changes against the checked-out commit's first parent.
+- **Contribution policy:** checks Conventional Commit syntax for the PR title and included commit subjects, human account type, target `main`, numbered branch, matching visible primary Issue and `Closes #N`/`Refs #N` field, and that the number refers to an open Issue in this repository created before the PR. It reads the event JSON and GitHub API; metadata is not interpolated into shell commands. The specific PR #1 transition is the only branch/date exception. Its primary Issue and other checks still apply.
+- **Human checks remain necessary:** CI cannot prove that local development began after Issue creation, that a user account is operated by its responsible human, that English text is imperative, that a translation preserves meaning, or that scope and fresh approval are correct. External URLs, full Markdown syntax and device behaviour are outside these checks. Keep inline link targets simple and URL-encode spaces/parentheses; the checker is not a general Markdown renderer.
+- To reproduce the contribution check, save a real pull-request webhook-shaped JSON file and the GitHub Issue API response, then run `python3 scripts/ci/check_pr.py --event /path/to/event.json --issue-json /path/to/issue.json` in a checkout containing both base/head commits. Omit `--issue-json` to use a read-only API request. Do not commit credentials or local event captures.
 
 Keep generated drafts, temporary files, local databases, tokens and build products out of commits. Curated research documents and their attribution sources under `docs/` are intentional project records. Follow [SECURITY.md](SECURITY.md) for exceptions involving authorized test data and for vulnerability reports.
 
 ## 5. AI-assisted development
 
-AI tools may read, create the assigned task's tracking Issue, implement, validate, create a compliant Issue-numbered task branch, commit, push that task branch and open a Draft PR **within an explicitly assigned task**. They must create or verify the Issue before edits and include its number in the branch and PR. That autonomy is not authority to take unrelated work, overwrite existing changes or expand the agreed product.
+Within an explicitly assigned task, AI tools may create its Issue and compliant branch, implement, validate, commit, push and open a Draft PR. They remain subject to sections 2–4 and must not expand scope or overwrite unrelated work.
 
-PRs MUST be opened under the responsible member's own GitHub user account, not a shared or bot account. An authorized agent may open the draft using that member's account. If a tool can only open bot-authored PRs, it must prepare the draft and hand it to the human to open instead; this workflow does not assign an alternative merger to a bot-authored PR.
+PRs MUST use the responsible member's own GitHub user account. An authorized agent may open a draft under that account; if a tool only opens bot-authored PRs, prepare the content for the human to open.
 
-Humans remain responsible for understanding, reviewing and explaining the resulting changes, especially SQL, migrations, imported-file processing, location behaviour and permission handling. Each PR MUST state whether AI was used; if used, identify the tool(s), purposes/scope and what the submitting human checked. Full prompts or chat transcripts are not required and must not expose private information.
+Humans remain responsible for understanding and explaining the changes, including relevant SQL, imports, location and permission handling. Each PR MUST state whether AI was used; if so, name its tools/scope and what the human actually verified. Full prompts or chat transcripts are unnecessary; do not expose private information.
 
 AI agents MUST NOT:
 
@@ -120,7 +132,7 @@ Important dependencies, data migrations and architecture changes MUST be identif
 
 ## 6. Review and merge
 
-The reviewer checks scope, correctness, actual evidence, SQL/data changes, privacy, cost implications and clarity across the whole current diff. They verify that they are eligible under section 1. Contributing implementation changes does not disqualify a non-author reviewer, but they must review and approve the resulting revision after the final commit.
+The reviewer checks scope, correctness, evidence, maintainability, SQL/data changes, privacy and costs across the current diff, applying the eligibility and fresh-approval rules in section 1.
 
 After feedback, the author updates the PR, reruns affected checks, explains any conflict resolution and requests fresh review of the new revision. All review conversations must be resolved and outstanding blocking change requests addressed by the appropriate human reviewers.
 
@@ -128,7 +140,7 @@ After feedback, the author updates the PR, reruns affected checks, explains any 
 
 - The PR links its primary Issue, the branch carries that Issue's number, and the diff matches the Issue's scope and declared completion status, subject only to the specific adoption record in section 2.
 - At least one eligible non-author human has approved the current revision in GitHub.
-- All applicable required checks pass and the relevant local/manual evidence is recorded; no unresolved blocking limitation is disguised as `N/A`.
+- Checks required for the current PR pass and relevant local/manual evidence is recorded; no unresolved blocking limitation is disguised as `N/A`.
 - Review conversations and blocking change requests are resolved.
 - The branch is mergeable, the final diff is reviewed and the squash message is correct.
 
@@ -136,9 +148,9 @@ Delete the merged branch. Do not reuse it for the next task. Do not enable auto-
 
 ## 7. GitHub enforcement setup
 
-**Observed on 12 November 2026:** this is a private personal repository; `main` returned `Branch not protected`; repository rulesets were empty. All three merge methods were enabled and auto-merge was disabled. The account plan was not established. These files do not change those settings.
+**Verified on 12 November 2026:** this is a public personal repository. The active [`protect-main` ruleset](https://github.com/RIOne1/HikingProject/settings/rules/27098958) targets `main`, requires a PR and one approval, dismisses stale approvals on push, requires resolved review conversations, permits only squash merging, and blocks force pushes and deletion. Its bypass list is empty. Force-push and deletion settings were inspected, not destructively tested.
 
-The repository owner must configure and verify the following before declaring the workflow technically enforced. Until then, the team still MUST obey the rules manually; the current gap is not a waiver.
+Maintain the following configuration. File-based policy does not configure GitHub, and settings can change independently of this document.
 
 - Protect `main` with an active ruleset or equivalent branch protection; require a PR and at least one human approving review.
 - Enable dismissal of stale approvals when changes are pushed. Team policy still requires a fresh approval after every new commit, even when GitHub retains an approval because the diff is unchanged.
@@ -147,10 +159,28 @@ The repository owner must configure and verify the following before declaring th
 - Block force pushes and deletion. Apply the requirements to administrators as supported, and do not grant bypass permissions that defeat non-author human review.
 - Permit squash merging and disable merge-commit/rebase merging for PRs. Linear-history protection alone does not mean squash-only.
 - Keep automated merging disabled and delete merged task branches.
-- Verify the configured behaviour using a harmless test PR before marking this setup complete.
+- Recheck the configured behaviour after changing protection settings. Do not use destructive test pushes or deletions.
 
-The required separation is between the PR author and the human approver; this policy does not exclude other contributors or commit co-authors. Before merging, the human author must verify the approver's eligibility and that approval covers the current revision. Humans must also check Issue creation order, branch numbering and the PR's Issue association; no automated check for those rules is currently installed. A green merge button or checklist is not a substitute for these checks.
+Settings and CI do not establish human identity, Issue-before-development order or complete review. The author and reviewer must still apply the human merge duties in section 6.
+
+**CI rollout boundary:** `Documentation integrity` and `Contribution policy` are the new workflow's actual job names. They are not yet registered as required ruleset checks. PR #1 has been merged, but the CI bootstrap in [PR #4](https://github.com/RIOne1/HikingProject/pull/4) is still awaiting human review and merge, so `main` does not yet contain this workflow. After that merge, verify runs on `main` and a subsequent PR, then add those exact GitHub Actions checks to `protect-main` under [Issue #5](https://github.com/RIOne1/HikingProject/issues/5), preserving the existing approval requirements. Team policy already requires applicable checks to pass; technical CI enforcement remains a pending setup step.
 
 Public repositories can use these protections on GitHub Free; private personal repositories need an eligible plan such as Pro. Verify existing entitlement first. Do not change visibility or buy a plan merely to bypass the free-development constraint. Resolve an unavailable enforcement path with the owner; do not claim the policy is technically enforced. Owners can still edit repository settings, so policy also prohibits weakening them to merge one's own work.
 
 References: [Issue/PR linking](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue), [protected branches](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches), [ruleset review settings](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets), [squash configuration](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/configuring-commit-squashing-for-pull-requests), [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).
+
+## 8. Project board
+
+Use the private [HikingProject MVP board](https://github.com/users/RIOne1/projects/1), linked from the repository's Projects tab. As configured on 12 November 2026, RIOne1 is the project admin and the owner authorized Write access for the existing member FakeReality666. Project access is separate from repository permissions; ask the owner to grant future members access rather than publishing private project content.
+
+| Status | Meaning |
+| --- | --- |
+| Backlog | Captured; scope or priority still needs triage |
+| Ready | Scope, acceptance, verification and dependencies are clear |
+| In progress | Work is underway, including Draft PRs |
+| In review | The human owner has requested review of the prepared implementation/evidence |
+| Done | Acceptance is complete and any required human-approved PR is merged |
+
+The board imports open HikingProject Issues and has a repository-scoped auto-add workflow. Create a real Issue before development; draft project cards do not supply an Issue number. Use one Issue card as the task record and link its PR to avoid duplicate tracking. Update status when work changes. Board labels and automatic state changes do not establish acceptance or approval: verify the linked evidence before treating an item as Done. The default automation that closes an Issue when a card moves to Done is disabled; changing a column must not silently close work.
+
+The [Issue forms](.github/ISSUE_TEMPLATE/) cover development tasks, bugs and technical validation. They request scope/reproduction, relevant MVP IDs, acceptance and verification; keep uncertain checks marked Not run. The default chooser uses them after merge to `main`. Disabling blank Issues is a UI aid, not enforcement against maintainers or API-created Issues; all tracking Issues must still carry the required information. Keep security reports in the private channel described by SECURITY.md.

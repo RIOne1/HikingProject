@@ -1,0 +1,43 @@
+name: Technical validation
+description: Test an uncertain technical, device or free-tier assumption before committing to it.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Create this Issue before implementation or validation edits. Use `<type>/<issue-number>-<description>` for its branch and link this same Issue in the PR.
+        Record a testable question, not a promised outcome. Development must stay free. Do not activate a paid plan or post tokens or private location data.
+  - type: textarea
+    id: question
+    attributes:
+      label: Question and decision
+      description: What assumption needs evidence, and which decision depends on the result?
+    validations:
+      required: true
+  - type: input
+    id: requirements
+    attributes:
+      label: MVP requirements
+      placeholder: MVP-03, MVP-05, or an explanation of cross-cutting validation
+    validations:
+      required: true
+  - type: textarea
+    id: method
+    attributes:
+      label: Method and environment
+      description: Devices, OS, SDK versions, synthetic fixtures, conditions and steps. State any real-device requirement.
+    validations:
+      required: true
+  - type: textarea
+    id: thresholds
+    attributes:
+      label: Pass criteria and stop conditions
+      description: Define measurable thresholds before testing, including the zero-cost boundary and failure handling.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence and remaining uncertainty
+      description: For planned work, say Not run. After testing, record results, sanitized evidence and the resulting decision.
+    validations:
+      required: true
