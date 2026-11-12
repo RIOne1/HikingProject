@@ -4,3 +4,6 @@
 !.env.example
 tmp/
 node_modules/
+/output/
+__pycache__/
+*.py[cod]
