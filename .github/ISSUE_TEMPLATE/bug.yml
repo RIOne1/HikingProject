@@ -1,0 +1,48 @@
+name: Bug report
+description: Report incorrect behaviour with a reproducible example.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For vulnerabilities, use the private reporting link in the Issue chooser. Use synthetic data and redact logs/screenshots; never attach credentials or personal tracks.
+  - type: textarea
+    id: behaviour
+    attributes:
+      label: Expected and actual behaviour
+      description: Explain the difference and its user impact.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: Include a minimal synthetic example and how often the problem occurs.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment and revision
+      placeholder: Device, OS, app build or commit; for docs, branch and file
+    validations:
+      required: true
+  - type: input
+    id: requirements
+    attributes:
+      label: MVP requirements
+      placeholder: MVP-XX, cross-cutting, or unknown
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance and verification
+      description: What would demonstrate the fix and guard against regression? Note any untested conditions.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Sanitized evidence
+      description: Optional logs or screenshots with private information removed.

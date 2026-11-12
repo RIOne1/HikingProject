@@ -40,7 +40,7 @@ English MVP is authoritative. If documents conflict materially, identify the con
 - Report exact commands/scenarios, results and limitations. Never invent test output, a successful build, a device test or an approval. Do not weaken checks to manufacture a pass.
 - Offline, background-location, notification and battery claims need relevant real-device evidence. Preserve the difference between a planned check and a passed check.
 - For bilingual MVP edits, preserve requirement IDs and acceptance meaning in both versions. Check local links and `git diff --check` for documentation changes.
-- No iOS project, app test suite or CI workflow exists at this documentation baseline. The first app-bootstrap task must establish and document verified build/test commands; update this note then. The research PDF generator is not an application test.
+- Repository CI checks documentation and contribution metadata; run `python3 scripts/ci/check_docs.py`, `python3 -m unittest discover -s scripts/ci -p 'test_*.py' -v` and `git diff --check` for relevant changes. See CONTRIBUTING.md for coverage and limitations. No iOS project or app test suite exists yet; the first app-bootstrap task must establish verified build/test commands. The research PDF generator is not an application test.
 
 ## Git and human handoff
 

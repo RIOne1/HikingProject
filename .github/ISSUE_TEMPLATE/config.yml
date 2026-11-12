@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability privately
+    url: https://github.com/RIOne1/HikingProject/security/advisories/new
+    about: Do not publish vulnerability details, credentials or personal tracks in an Issue.

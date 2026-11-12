@@ -151,7 +151,7 @@
 - 配置并验证 [CONTRIBUTING.md](../CONTRIBUTING.md) 中的 GitHub review 保护；仅有文件规则不能实现技术强制。
 - 对照实际应用和 SDK 行为验证隐私声明。
 
-**当前状态：**尚未建立 iOS 应用工程、应用测试套件或 CI 工作流。首个应用基础工程 PR 必须在验证后记录真实 target、scheme 和构建／测试命令。在此之前，不得把猜测命令或勾选框当成验证证据。
+**当前状态：**仓库 CI 检查文档完整性和贡献流程元数据，不代表应用通过验收。目前尚未建立 iOS 应用工程或应用测试套件。首个应用基础工程 PR 必须在验证后记录真实 target、scheme 和构建／测试命令。在此之前，不得把猜测命令或勾选框当成验证证据。实际检查及其局限见 [CONTRIBUTING.md](../CONTRIBUTING.md#verification-evidence)。
 
 ## 7. 证据与维护
 

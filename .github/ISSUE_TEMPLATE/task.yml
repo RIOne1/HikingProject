@@ -1,0 +1,50 @@
+name: Development task
+description: Define a focused change before creating its branch.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Create this Issue before development. Then use `<type>/<issue-number>-<description>` and link this Issue in the PR. Do not include secrets, personal tracks or confidential vulnerability details.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and intended result
+      description: What problem exists, and what should change for users or contributors?
+    validations:
+      required: true
+  - type: input
+    id: requirements
+    attributes:
+      label: MVP requirements
+      placeholder: MVP-03, MVP-05, or a short explanation of cross-cutting work
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope and boundaries
+      description: List the intended changes, exclusions and dependencies on other Issues or PRs.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Use observable outcomes; do not claim planned checks have passed.
+      placeholder: "- [ ] A specific, verifiable outcome"
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: Verification plan
+      description: Relevant checks, fixtures or devices; explain what cannot yet be verified.
+    validations:
+      required: true
+  - type: textarea
+    id: impacts
+    attributes:
+      label: Cost, data and dependency impacts
+      description: Development must remain free. State new dependencies, permissions or data changes, or explain why none apply.
+    validations:
+      required: true

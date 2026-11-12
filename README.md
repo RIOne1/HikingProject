@@ -43,9 +43,23 @@ Keep user data separate from Mapbox's managed cache. Future changes remain possi
 
 **Current development must remain free.** Do not activate paid services or upgrade trials automatically. Pause affected service use when a free quota or trial ends. The post-deployment service budget remains a hard NZ$50/month; Mapbox's lack of an automatic spending cap is an unresolved production-release condition. Apple Developer Program membership is a later, separately budgeted distribution expense. Validate demand before choosing monetization.
 
-There is no iOS app project, application test suite or CI workflow yet. The app-bootstrap PR must document actual verified targets, schemes and commands. Xcode 27.2 and Swift 6.4.2 were observed during planning; they are not permanent version pins. No paid CI or cloud-build service is required for the current plan.
+There is no iOS app project or application test suite yet. [Repository CI](.github/workflows/repository-checks.yml) checks documents and contribution conventions on standard Linux runners; it does not build or test the app. The app-bootstrap PR must document actual verified targets, schemes and commands. Xcode 27.2 and Swift 6.4.2 were observed during planning; they are not permanent version pins. No paid CI or cloud-build service is required for the current plan.
 
-The mandatory non-author human review policy is documented, but [GitHub protections are not yet configured](CONTRIBUTING.md#7-github-enforcement-setup). A confidential external security-reporting channel is also [not yet configured](SECURITY.md#reporting-a-vulnerability). Neither status is fixed merely by adding these files.
+This is a public repository. The active [`protect-main` ruleset](https://github.com/RIOne1/HikingProject/settings/rules/27098958) requires a PR, one approving review, resolved review conversations and squash merging; it dismisses stale approvals and blocks force pushes and deletion, with no bypass actors. [Human review and merge duties](CONTRIBUTING.md#7-github-enforcement-setup) still apply. See [SECURITY.md](SECURITY.md#reporting-a-vulnerability) for confidential reporting and its verification limits.
+
+## Team workflow and checks
+
+Use the [Issue forms](.github/ISSUE_TEMPLATE/) for development tasks, bugs and technical validation, then track the Issue on the private [HikingProject MVP board](https://github.com/users/RIOne1/projects/1). The board is linked to this repository and shared with the current team; repository access does not automatically grant project access. See [CONTRIBUTING](CONTRIBUTING.md#8-project-board) for status meanings. Forms appear in the default Issue chooser after merging them into `main`.
+
+From the repository root, using Python 3.10+ and Git:
+
+```bash
+python3 scripts/ci/check_docs.py
+python3 -m unittest discover -s scripts/ci -p 'test_*.py' -v
+git diff --check
+```
+
+These checks use Python's standard library and need no package installation. CI also validates PR metadata and commit subjects. Read the [coverage and bootstrap limits](CONTRIBUTING.md#verification-evidence); green checks do not constitute human approval, proof of translation accuracy or app acceptance.
 
 ## Repository layout
 
@@ -56,6 +70,8 @@ HikingProject/
 ├── CONTRIBUTING.md
 ├── SECURITY.md
 ├── .github/
+│   ├── ISSUE_TEMPLATE/  # Task, bug and technical-validation forms
+│   ├── workflows/repository-checks.yml
 │   └── pull_request_template.md
 ├── docs/
 │   ├── MVP.md
@@ -65,6 +81,7 @@ HikingProject/
 │           ├── Hiking_App_User_Feedback_Research_ZH_2026-11-06.pdf
 │           └── sources.json
 ├── scripts/
+│   ├── ci/  # Dependency-free repository checks and regression cases
 │   └── research/
 │       └── build_user_feedback_report.py
 ├── output/  # Generated drafts and exports; ignored by Git

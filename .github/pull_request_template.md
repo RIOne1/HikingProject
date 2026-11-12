@@ -8,9 +8,10 @@
 ## Scope and review focus
 
 - MVP requirement(s): <!-- MVP-XX, or explain cross-cutting/documentation scope. -->
-- Primary Issue (required): <!-- Link the real tracking Issue in this repository; its number must match the branch. N/A is not allowed. -->
+- Primary Issue (required): <!-- Use #N or [#N](https://github.com/RIOne1/HikingProject/issues/N). Match the branch number; N/A is not allowed. -->
 - Issue relationship: <!-- Use Closes #N for completed scope, or Refs #N and explain remaining work for partial scope. -->
 - Changes and files to focus on:
+- Dependencies on open PRs: <!-- N/A, or link the prerequisite PR and identify the incremental diff; target main and explain merge order. -->
 - Contributors to this PR: <!-- All human authors/co-authors/contributors, not only the person who pushed. -->
 
 ## Verification evidence
@@ -44,6 +45,7 @@
 - [ ] The branch describes the work, the title follows the commit convention, and the PR targets `main`.
 - [ ] The submitting human has inspected the entire diff and the scope matches the linked requirements.
 - [ ] Verification and limitations above are accurate; missing required checks are not presented as passed.
+- [ ] The repository checks pass for this revision; any missing run or failure is explained above and remains a merge blocker.
 - [ ] Relevant documentation and both MVP versions are aligned, or the reason for N/A is stated.
 - [ ] The change contains no live credentials, unauthorized private data, local databases or accidental generated artifacts.
 - [ ] Contributors and AI assistance are recorded truthfully; non-author human review has been requested.

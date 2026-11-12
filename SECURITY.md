@@ -2,26 +2,27 @@
 
 ## Supported state
 
-HikingProject is in private, pre-release development. There is no public released version or security-support lifetime to promise. The team handles findings in the current development baseline and assesses their effect on any affected branches. Review requirements in [CONTRIBUTING.md](CONTRIBUTING.md) also apply to security fixes.
+HikingProject is a public repository in pre-release development. There is no released app version or security-support lifetime to promise. The team handles findings in the current development baseline and assesses their effect on any affected branches. Review requirements in [CONTRIBUTING.md](CONTRIBUTING.md) also apply to security fixes.
 
 ## Reporting a vulnerability
 
-**No external confidential reporting channel is currently configured.** Do not treat a GitHub username as a private messaging address or assume that adding this file enables vulnerability reporting. Do not send vulnerability details to an unverified destination.
+GitHub Private vulnerability reporting is enabled for this public repository. Use [Report a vulnerability](https://github.com/RIOne1/HikingProject/security/advisories/new), or open the repository's Security → Advisories page and choose the private reporting action. Sign in to GitHub if required. The repository owner receives and triages reports; no response-time guarantee is promised.
 
-While the project is private, team members should first agree a private communication channel with the repository maintainer without disclosing sensitive details in the request. Keep vulnerability details, exploit material, tokens, exact personal locations and private GPX files out of public Issues, PRs and discussions.
+**Verified on 12 November 2026:** the setting is enabled in GitHub and confirmed through its API. An end-to-end report from an external reporter and maintainer receipt have **not** been tested. Complete a coordinated, sanitized test before public app release; enabling the feature alone does not satisfy that release gate. The security policy becomes visible on GitHub's Security page after this file reaches `main`.
 
-Security work also needs a tracking Issue before repository edits, as required by [CONTRIBUTING.md](CONTRIBUTING.md). Keep that Issue and the linked PR description sanitized; record only a non-sensitive scope and acceptance criteria, and keep confidential details in the agreed private channel.
+Keep vulnerability details, exploit material, tokens, exact personal locations and private GPX files out of public Issues, PRs and discussions. If the reporting link is unavailable, agree a private channel with the maintainer before sending details; do not substitute a public Issue.
 
-Before public app release, the maintainer MUST complete a confidential reporting setup. Choose the repository-publication sequence explicitly:
+Security work still needs a tracking Issue before repository edits under [CONTRIBUTING.md](CONTRIBUTING.md). Keep that Issue and its PR description sanitized, with non-sensitive scope and acceptance criteria; retain confidential details in the private report or agreed channel. A useful report identifies the affected revision/build, device/OS, impact, minimal reproduction and redacted evidence. Prefer synthetic reproductions; never include working credentials or another person's location data without authorization.
 
-1. While the repository is private, choose the reporting method and responsible humans. If a working channel is required before any source becomes public, configure another genuinely usable confidential method first.
-2. If using GitHub Private vulnerability reporting, an authorized human must first make the repository public and then enable and verify the feature as part of that publication process. It cannot be enabled on the current private repository. Do not announce the reporting channel as ready before verification.
-3. Test that a report can be submitted and received by the responsible humans, whichever method is chosen.
-4. Update this policy with the verified method and any response commitments the team can actually maintain.
+[GitHub's private reporting documentation](https://docs.github.com/en/code-security/how-tos/report-and-fix-vulnerabilities/configure-vulnerability-reporting/configure-for-a-repository) describes feature availability and setup.
 
-An unverified reporting channel blocks public app release. Repository visibility changes require their own authorization; this policy does not authorize making the code public. No email address, active report link or response-time guarantee is implied today. GitHub's private-reporting feature is not currently available here. [Official setup](https://docs.github.com/en/code-security/how-tos/report-and-fix-vulnerabilities/configure-vulnerability-reporting/configure-for-a-repository).
+## Repository security controls
 
-Once a confidential channel is agreed, a useful report includes the affected version/build, device/OS where relevant, impact, minimal reproduction steps and redacted supporting evidence. Prefer synthetic reproductions. Never include working credentials or another person's location data without their explicit authorization.
+The free public-repository controls verified on 12 November 2026 are dependency graph, Dependabot alerts, Dependabot security updates, secret scanning alerts, push protection and private vulnerability reporting. Secret detection covers supported patterns; it does not establish that all private data or credentials are absent. Settings were verified; no real secret was pushed to test them.
+
+Dependabot can propose security-update PRs when supported dependency data exists. Bot-authored proposals are **not mergeable deliverables under this team's policy**: a human must create a sanitized tracking Issue, use a numbered task branch, review/adapt the update, and open a human-authored PR with normal checks and non-author approval. Preserve accurate attribution and link the proposal. Do not merge a bot PR or waive branch/Issue rules. Version-update scheduling and application dependency coverage are not established at this baseline.
+
+No paid scanner, AI scan or agentic autofix was activated. CodeQL/app scanning is deferred until useful supported application code and a verified free workflow exist. Reassess feature eligibility and costs before changing repository visibility or automation. The settings described here are a dated observation, not a guarantee they cannot drift.
 
 ## Secrets and Mapbox access
 

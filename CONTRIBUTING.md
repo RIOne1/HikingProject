@@ -24,7 +24,7 @@ Before creating a task branch or starting repository changes, contributors MUST 
 
 Choose one primary Issue for each branch and PR. Its real GitHub Issue number MUST appear in the branch name and PR description; a PR number or `MVP-XX` requirement ID is not a substitute. Do not invent a number or open a duplicate Issue just to obtain one. Additional related Issues may be linked separately.
 
-After the Issue exists, start the task from the latest `main` on a short-lived branch. Inspect the working tree first; preserve unrelated work. Do not switch, reset, clean or stash someone else's changes to make a task convenient. Keep one coherent purpose per branch and PR. Do not reuse a branch after its PR is merged.
+After the Issue exists, start the task from the latest `main` on a short-lived branch. If the assigned work requires an unmerged PR, first verify the latest `main`, then branch from that documented prerequisite. Keep the new PR targeted at `main`, disclose the inherited commits and provide an incremental comparison for reviewers. The human author must resolve the dependency/merge order and review the complete resulting diff before merge; this does not waive any Issue, naming, approval or verification rule. Inspect the working tree first; preserve unrelated work. Do not switch, reset, clean or stash someone else's changes to make a task convenient. Keep one coherent purpose per branch and PR. Do not reuse a branch after its PR is merged.
 
 Required branch format:
 
@@ -95,7 +95,14 @@ For each meaningful check, give the exact command or manual scenario, environmen
 
 UI changes SHOULD include sanitized screenshots or a short recording. Location, offline-map, notification and long-running recording changes need relevant real-device evidence when applicable; a simulator or mocked service alone cannot prove outdoor/background reliability. Use synthetic or authorized fixtures rather than private tracks or home locations.
 
-**Current bootstrap state:** the repository has no iOS project, application test suite or CI workflow yet. Do not invent a scheme, target, `xcodebuild` command or `swift test` result. The app-bootstrap PR MUST add verified build/test instructions for the project it actually creates. For documentation-only changes, check meaning, bilingual parity, links and formatting; `git diff --check` is an existing formatting check. The research PDF generator is not an app test.
+**Current bootstrap state:** the repository has no iOS project or application test suite yet. Repository CI exists for documentation and contribution checks only. Do not invent a scheme, target, `xcodebuild` command or `swift test` result. The app-bootstrap PR MUST add verified build/test instructions for the project it actually creates. For documentation-only changes, check meaning, bilingual parity, links and formatting; `git diff --check` is an existing formatting check. The research PDF generator is not an app test.
+
+The [Repository checks workflow](.github/workflows/repository-checks.yml) uses standard GitHub-hosted Linux runners, a checkout action pinned to a full commit SHA, read-only permissions, a five-minute limit per job, and no artifact uploads, caches, app secrets or package installation. It runs on PR creation/updates, relevant metadata edits and pushes to `main`; manual dispatch becomes available after the workflow reaches `main`. Do not switch to paid/larger runners. [GitHub's billing documentation](https://docs.github.com/en/billing/concepts/product-billing/github-actions) describes free standard runners for public repositories.
+
+- **Documentation integrity:** checks local inline Markdown links/heading anchors, trailing whitespace, matching bilingual MVP requirement IDs/order, one acceptance block per requirement, validator regression cases and changed-file whitespace. Run `python3 scripts/ci/check_docs.py`, `python3 -m unittest discover -s scripts/ci -p 'test_*.py' -v` and `git diff --check` locally with Python 3.10+ and Git. CI uses `git diff --check HEAD^ HEAD` to inspect committed changes against the checked-out commit's first parent.
+- **Contribution policy:** checks Conventional Commit syntax for the PR title and included commit subjects, human account type, target `main`, numbered branch, matching visible primary Issue and `Closes #N`/`Refs #N` field, and that the number refers to an open Issue in this repository created before the PR. It reads the event JSON and GitHub API; metadata is not interpolated into shell commands. The specific PR #1 transition is the only branch/date exception. Its primary Issue and other checks still apply.
+- **Human checks remain necessary:** CI cannot prove that local development began after Issue creation, that a user account is operated by its responsible human, that English text is imperative, that a translation preserves meaning, or that scope and fresh approval are correct. External URLs, full Markdown syntax and device behaviour are outside these checks. Keep inline link targets simple and URL-encode spaces/parentheses; the checker is not a general Markdown renderer.
+- To reproduce the contribution check, save a real pull-request webhook-shaped JSON file and the GitHub Issue API response, then run `python3 scripts/ci/check_pr.py --event /path/to/event.json --issue-json /path/to/issue.json` in a checkout containing both base/head commits. Omit `--issue-json` to use a read-only API request. Do not commit credentials or local event captures.
 
 Keep generated drafts, temporary files, local databases, tokens and build products out of commits. Curated research documents and their attribution sources under `docs/` are intentional project records. Follow [SECURITY.md](SECURITY.md) for exceptions involving authorized test data and for vulnerability reports.
 
@@ -136,9 +143,9 @@ Delete the merged branch. Do not reuse it for the next task. Do not enable auto-
 
 ## 7. GitHub enforcement setup
 
-**Observed on 12 November 2026:** this is a private personal repository; `main` returned `Branch not protected`; repository rulesets were empty. All three merge methods were enabled and auto-merge was disabled. The account plan was not established. These files do not change those settings.
+**Verified on 12 November 2026:** this is a public personal repository. The active [`protect-main` ruleset](https://github.com/RIOne1/HikingProject/settings/rules/27098958) targets `main`, requires a PR and one approval, dismisses stale approvals on push, requires resolved review conversations, permits only squash merging, and blocks force pushes and deletion. Its bypass list is empty. PR #1 visibly requires approval and cannot merge without it. Force-push and deletion settings were inspected, not destructively tested.
 
-The repository owner must configure and verify the following before declaring the workflow technically enforced. Until then, the team still MUST obey the rules manually; the current gap is not a waiver.
+Maintain the following configuration. File-based policy does not configure GitHub, and settings can change independently of this document.
 
 - Protect `main` with an active ruleset or equivalent branch protection; require a PR and at least one human approving review.
 - Enable dismissal of stale approvals when changes are pushed. Team policy still requires a fresh approval after every new commit, even when GitHub retains an approval because the diff is unchanged.
@@ -147,10 +154,28 @@ The repository owner must configure and verify the following before declaring th
 - Block force pushes and deletion. Apply the requirements to administrators as supported, and do not grant bypass permissions that defeat non-author human review.
 - Permit squash merging and disable merge-commit/rebase merging for PRs. Linear-history protection alone does not mean squash-only.
 - Keep automated merging disabled and delete merged task branches.
-- Verify the configured behaviour using a harmless test PR before marking this setup complete.
+- Recheck the configured behaviour after changing protection settings. Do not use destructive test pushes or deletions.
 
-The required separation is between the PR author and the human approver; this policy does not exclude other contributors or commit co-authors. Before merging, the human author must verify the approver's eligibility and that approval covers the current revision. Humans must also check Issue creation order, branch numbering and the PR's Issue association; no automated check for those rules is currently installed. A green merge button or checklist is not a substitute for these checks.
+The required separation is between the PR author and the human approver; this policy does not exclude other contributors or commit co-authors. Before merging, the human author must verify the approver's eligibility and that approval covers the current revision. CI checks branch numbering and the visible Issue relationship as described above. Humans must still verify the Issue existed before development, review scope and check approval freshness. A green merge button or checklist is not a substitute for these checks.
+
+**CI rollout boundary:** `Documentation integrity` and `Contribution policy` are the new workflow's actual job names. They are not yet registered as required ruleset checks. PR #1 and the CI bootstrap PR remain unmerged, so `main` does not yet contain this workflow. Requiring these checks now would leave PR #1 waiting for jobs its branch does not define. After the human-approved bootstrap merge, verify runs on `main` and a subsequent PR, then add those exact GitHub Actions checks to `protect-main` without weakening the existing approval requirements. This is an explicit pending setup step, not a claim of complete CI enforcement. Team policy already requires all applicable checks to pass.
 
 Public repositories can use these protections on GitHub Free; private personal repositories need an eligible plan such as Pro. Verify existing entitlement first. Do not change visibility or buy a plan merely to bypass the free-development constraint. Resolve an unavailable enforcement path with the owner; do not claim the policy is technically enforced. Owners can still edit repository settings, so policy also prohibits weakening them to merge one's own work.
 
 References: [Issue/PR linking](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue), [protected branches](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches), [ruleset review settings](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/available-rules-for-rulesets), [squash configuration](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/configuring-commit-squashing-for-pull-requests), [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).
+
+## 8. Project board
+
+Use the private [HikingProject MVP board](https://github.com/users/RIOne1/projects/1), linked from the repository's Projects tab. As configured on 12 November 2026, RIOne1 is the project admin and the owner authorized Write access for the existing member FakeReality666. Project access is separate from repository permissions; ask the owner to grant future members access rather than publishing private project content.
+
+| Status | Meaning |
+| --- | --- |
+| Backlog | Captured; scope or priority still needs triage |
+| Ready | Scope, acceptance, verification and dependencies are clear |
+| In progress | Work is underway, including Draft PRs |
+| In review | The human owner has requested review of the prepared implementation/evidence |
+| Done | Acceptance is complete and any required human-approved PR is merged |
+
+The board imports open HikingProject Issues and has a repository-scoped auto-add workflow. Create a real Issue before development; draft project cards do not supply an Issue number. Use one Issue card as the task record and link its PR to avoid duplicate tracking. Update status when work changes. Board labels and automatic state changes do not establish acceptance or approval: verify the linked evidence before treating an item as Done. The default automation that closes an Issue when a card moves to Done is disabled; changing a column must not silently close work.
+
+The [Issue forms](.github/ISSUE_TEMPLATE/) cover development tasks, bugs and technical validation. They request scope/reproduction, relevant MVP IDs, acceptance and verification; keep uncertain checks marked Not run. The default chooser uses them after merge to `main`. Disabling blank Issues is a UI aid, not enforcement against maintainers or API-created Issues; all tracking Issues must still carry the required information. Keep security reports in the private channel described by SECURITY.md.
