@@ -1,6 +1,6 @@
 # HikingProject
 
-A planned native iPhone app for beginner-to-intermediate half-day and full-day hiking in New Zealand. The repository includes native iOS and React internal-tool foundations, a shared synthetic catalogue, tests, team policies and research. The complete hiking workflow and MVP acceptance remain pending.
+A planned iPhone app and Web planner for beginner-to-intermediate half-day and full-day hiking in New Zealand, with an administrator console for users, route content and publication review. The repository currently contains iOS and internal React catalogue foundations, synthetic data and tests. The expanded MVP below is an approved specification, not implemented functionality.
 
 ## Start here
 
@@ -18,9 +18,11 @@ Before starting repository changes, create or confirm the task's tracking Issue,
 
 ## Agreed product baseline
 
-The first release completes route selection/import, offline preparation, location and track recording, off-route warnings including lock-screen notifications, recorded-path display, local history and GPX export. Start with 20–30 routes whose sources are checked; field-test representative routes and record the two kinds of evidence separately. Imported GPX routes use the same core workflow within documented, tested limits.
+The core workflow is Web selection of whole trails, junction segments or partial segments with snapping/via points, or simpler online route combination on mobile; save a private plan, sync it to iPhone, download it, walk and record, then deliberately submit feedback and App-recorded completion evidence for administrator approval before publication. Preserve chosen segments and confirm connectors; reject disconnected or confirmed-closed selections. Start with one connected, field-testable pilot network whose location is still undecided. Scenario coverage replaces the initial route-count gate; 20–30 curated routes remain a later content target.
 
-No account is required. Full backup/restore, cloud backup, live location sharing, automatic route planning/rerouting, community features and Mapbox GL JS tools are later candidates. GPX export is not a full application backup. Expansion to multi-day/advanced hiking or global route coverage follows validation rather than being a first-release promise.
+Guests retain browsing, local recording and downloaded-route use. Private GPX keeps its original segments/gaps without requiring checked-network membership; import/navigation, lock-screen off-route alerts, local history and GPX export remain in scope. Login is required for private-plan sync, condition reports and publication submissions. An incomplete hike can still produce a report; imported GPX alone cannot establish publication eligibility. Expired login must not block an existing offline hike. Known confirmed closures block new planning, publication and starting planned navigation, while preserving map access, independent recording and ongoing hikes; offline clients can only act on received status.
+
+Raw tracks remain private by default; submitted evidence must support the complete route, including connectors and repeated traversals, without requiring unrelated approach/departure locations. Public geometry changes require a new revision and review; status can update independently. Withdrawal/account deletion and reconnect cleanup must be verified before external release, distinguishing the deleting user's data from other users' independent recordings. Full backup/restore, automatic raw-history cloud backup, live sharing, offline/mid-hike replanning, automatic rerouting, voice turn-by-turn guidance and broader social features remain deferred. GPX export is not a full backup.
 
 The team is planned as two to three people. The owner leads development with AI assistance and leads testing. Practical SQL learning is an explicit project goal; contributors remain responsible for understanding and explaining their changes.
 
@@ -28,16 +30,18 @@ The team is planned as two to three people. The owner leads development with AI 
 
 | Area | Baseline |
 | --- | --- |
-| Client | Swift + SwiftUI, iPhone, iOS 18+; UIKit where required |
-| Internal web tool | React + TypeScript + Vite for team route/content work; no consumer web parity or GL JS |
-| Maps | Mapbox Maps SDK for iOS, conditional on technical and production-cost verification |
+| Mobile | Swift + SwiftUI, iPhone, iOS 18+; UIKit where required |
+| Web | React + TypeScript + Vite; public planner/reports and administrator console |
+| Maps | Mapbox iOS SDK + Mapbox GL JS, conditional on technical and cost verification |
+| Planning | Checked connected network, ordered segments and confirmed connectors; data source and graph/routing implementation still need validation |
 | Recording and alerts | Core Location and local notifications, independent of map rendering |
-| Business data | SQLite + GRDB, parameterized SQL, stable IDs and versioned migrations |
+| Local business data | SQLite + GRDB, parameterized SQL, stable IDs and versioned migrations |
 | Structure | One modular app, lightweight MVVM and Swift Concurrency |
-| Content | Initially bundled GeoJSON + JSON catalogue; a versioned static-update path using URLSession |
+| Content | Versioned GeoJSON + JSON, network topology, immutable route revisions and offline snapshots; current metadata-only v1 remains a prototype |
 | Exchange | GPX import/export using Foundation XML processing |
 | Dependencies and checks | Swift Package Manager, Swift Testing, XCTest, Xcode diagnostics and real-device tests |
-| Backend | No first-release application server, accounts service or cloud database |
+| Backend | Local Supabase: PostgreSQL + PostGIS + Auth + RLS; Supabase SDKs, explicit SQL and SQL migrations; no Prisma |
+| Login and mail | Email/password with stable user IDs; captured local mail for team development, Resend later; real confirmation/recovery/deletion before external testing |
 
 Keep user data separate from Mapbox's managed cache. Future changes remain possible when requirements justify them; assess their migration and verification impact. See [MVP requirements and acceptance](docs/MVP.md) for the full conditions.
 
@@ -45,7 +49,7 @@ Keep user data separate from Mapbox's managed cache. Future changes remain possi
 
 **Current development must remain free.** Do not activate paid services or upgrade trials automatically. Pause affected service use when a free quota or trial ends. The post-deployment service budget remains a hard NZ$50/month; Mapbox's lack of an automatic spending cap is an unresolved production-release condition. Apple Developer Program membership is a later, separately budgeted distribution expense. Validate demand before choosing monetization.
 
-The foundation includes `apps/mobile/HikingProject.xcodeproj`, a portable Swift/GRDB package and `apps/web/`. [Repository CI](.github/workflows/repository-checks.yml) checks documents, contribution conventions, React and portable Swift on the self-hosted Linux runner. iOS builds/UI tests run locally on Mac/Xcode. Follow the [development guide](docs/guides/DEVELOPMENT.md) and [actual validation evidence](docs/guides/FOUNDATION-VALIDATION.md); a tokenless sample build does not prove offline maps, recording or App Store readiness.
+The foundation includes `apps/mobile/HikingProject.xcodeproj`, a portable Swift/GRDB package and `apps/web/`. No planner, GL JS, backend/Auth/RLS, sync or publication system is installed or implemented. [Repository CI](.github/workflows/repository-checks.yml) checks documents, contribution conventions, React and portable Swift on the self-hosted Linux runner. It does not yet test backend permissions or migrations. iOS builds/UI tests run locally on Mac/Xcode. Follow the [development guide](docs/guides/DEVELOPMENT.md) and [actual validation evidence](docs/guides/FOUNDATION-VALIDATION.md); a tokenless sample build does not prove offline maps, recording or App Store readiness.
 
 This is a public repository. The active [`protect-main` ruleset](https://github.com/RIOne1/HikingProject/settings/rules/27098958) requires a PR, one approving review, resolved review conversations and squash merging; it dismisses stale approvals and blocks force pushes and deletion, with no bypass actors. Both `Documentation integrity` and `Contribution policy` are required GitHub Actions checks, and the task branch must be up to date with `main`. See the [verified configuration and human merge duties](CONTRIBUTING.md#7-github-enforcement-setup); passing CI does not replace human approval. See [SECURITY.md](SECURITY.md#reporting-a-vulnerability) for confidential reporting and its verification limits.
 
@@ -77,14 +81,14 @@ HikingProject/
 │   └── pull_request_template.md
 ├── apps/
 │   ├── mobile/  # SwiftUI app, Xcode project, portable core and tests
-│   └── web/     # React internal route/content workspace
+│   └── web/     # React catalogue foundation; planner/console are planned
 ├── shared/      # Synthetic catalogue fixture, JSON Schema and Swift resource
 ├── Package.swift / Package.resolved
 ├── package.json / package-lock.json
 ├── docs/
 │   ├── MVP.md
 │   ├── MVP.zh-CN.md
-│   ├── guides/  # Development, mobile, web, data, CI and validation
+│   ├── guides/  # Development, mobile, web, backend, data, CI and validation
 │   └── research/
 │       └── 2026-11-06-user-feedback/
 │           ├── Hiking_App_User_Feedback_Research_ZH_2026-11-06.pdf
