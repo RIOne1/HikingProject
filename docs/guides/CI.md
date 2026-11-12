@@ -1,6 +1,6 @@
 # CI runner guide
 
-The [workflow](../../.github/workflows/repository-checks.yml) uses only the owner's self-hosted Linux x64 runner with labels `self-hosted`, `linux`, `x64`, `hikingproject-local-ci`. The owner identified its image as `hikingproject-ci-runner:2.338.2`, Ubuntu 24.04.5 LTS, running in Docker on Windows. The repository does not manage or rebuild that private runner image.
+The [workflow](../../.github/workflows/repository-checks.yml) uses only the owner's self-hosted Linux x64 runner with labels `self-hosted`, `linux`, `x64`, `hikingproject-local-ci`. The owner initially identified its image as `hikingproject-ci-runner:2.338.2`, Ubuntu 24.04.5 LTS, running in Docker on Windows, and updated it with the native prerequisites below on 13 November 2026. The subsequent [verified run](https://github.com/RIOne1/HikingProject/actions/runs/43209940168/attempts/2) passed both required checks, including Linux Swift tests. The repository does not manage or rebuild that private runner image.
 
 ## Checks and tools
 
@@ -19,7 +19,7 @@ For a missing header/library or unsupported image, keep the check failing, repai
 
 ## Ubuntu 24.04 image preparation
 
-The first [foundation run](https://github.com/RIOne1/HikingProject/actions/runs/43209471551) passed Web and contribution checks but failed in Swift setup because `file` was absent. The image must be extended on the owner's PC before Linux Swift verification can pass. Add the following to the existing Dockerfile while its build user is root, before the final unprivileged `USER` instruction; retain the image's existing runner entrypoint and registration configuration:
+The first [foundation run](https://github.com/RIOne1/HikingProject/actions/runs/43209471551) exposed missing native tools. The owner has since updated the image, and Linux Swift verification passed. Retain these prerequisites when rebuilding the runner: add the following to its Dockerfile while the build user is root, before the final unprivileged `USER` instruction, keeping the existing runner entrypoint and registration configuration:
 
 ```dockerfile
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
