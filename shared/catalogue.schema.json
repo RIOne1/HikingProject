@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HikingProject foundation catalogue v1",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "routes"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "routes": {
+      "type": "array",
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "difficulty",
+          "distanceMetres",
+          "estimatedMinutes",
+          "startLatitude",
+          "startLongitude",
+          "sourceKind",
+          "attribution"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "difficulty": {
+            "enum": [
+              "easy",
+              "moderate"
+            ]
+          },
+          "distanceMetres": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100000
+          },
+          "estimatedMinutes": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1440
+          },
+          "startLatitude": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90
+          },
+          "startLongitude": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180
+          },
+          "sourceKind": {
+            "const": "synthetic"
+          },
+          "attribution": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          }
+        }
+      }
+    }
+  }
+}

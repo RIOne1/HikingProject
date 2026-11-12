@@ -1,0 +1,5 @@
+// Copy to Local.xcconfig (ignored). Leave empty for free, tokenless development.
+// A public Mapbox pk.* token enables an online preview; review trial/cost gates first.
+MAPBOX_ACCESS_TOKEN =
+// Device signing is local. Simulator builds do not require team enrollment.
+DEVELOPMENT_TEAM =

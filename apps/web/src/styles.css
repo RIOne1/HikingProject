@@ -1,0 +1,47 @@
+:root { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #21372c; background: #f4f3ed; font-synthesis: none; line-height: 1.5; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+button, input { font: inherit; }
+button { cursor: pointer; }
+button:focus-visible, input:focus-visible { outline: 3px solid #bb7022; outline-offset: 4px; }
+.workspace { max-width: 1120px; margin: auto; padding: 32px 40px; }
+.brand { display: flex; gap: 12px; align-items: center; font-weight: 700; letter-spacing: -.02em; }
+.brand-mark { font-size: 34px; line-height: 1; }
+.team-tag { margin-left: auto; font-size: 11px; letter-spacing: .12em; color: #587064; }
+.header { padding-bottom: 34px; }
+.eyebrow { font-size: 11px; letter-spacing: .17em; font-weight: 700; color: #657560; margin-top: 64px; }
+h1 { font-size: clamp(36px, 5vw, 58px); font-weight: 600; line-height: 1.12; letter-spacing: -.045em; margin: 20px 0; }
+.intro { max-width: 590px; color: #607065; font-size: 17px; }
+.notice { border: 1px solid #d9d3bb; background: #eeeadd; padding: 16px 20px; display: flex; gap: 20px; color: #605632; font-size: 13px; border-radius: 5px; }
+.notice strong { white-space: nowrap; }
+.section-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 36px; }
+h2 { font-size: 22px; font-weight: 600; letter-spacing: -.02em; }
+.section-heading > span { font-size: 13px; color: #66766c; }
+.search-label { display: block; max-width: 400px; font-size: 13px; font-weight: 600; margin: 14px 0 24px; }
+input { width: 100%; padding: 12px 14px; border: 1px solid #cbd3c8; background: #fafaf6; border-radius: 5px; margin-top: 7px; color: #21372c; }
+.route-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.route-card { border: 1px solid #d5dccf; background: #fcfcf8; padding: 26px; border-radius: 7px; }
+.difficulty { display: inline-block; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; padding: 4px 9px; border-radius: 3px; font-weight: 700; background: #e5edde; }
+.difficulty.moderate { background: #eee6d6; color: #76603c; }
+h3 { margin: 20px 0 10px; font-size: 24px; font-weight: 600; letter-spacing: -.025em; }
+.route-metrics { font-size: 17px; margin: 6px 0; }
+.route-metrics span { padding: 0 8px; color: #728576; }
+.muted { color: #6a796e; font-size: 12px; }
+.route-card button { margin-top: 22px; padding: 12px 0 0; border: 0; border-top: 1px solid #dde3d8; width: 100%; text-align: left; color: #31573f; background: none; font-size: 13px; font-weight: 600; }
+.route-card button span { float: right; }
+.route-card button[aria-pressed="true"] { color: #965514; }
+.empty { padding: 28px 0; color: #5c6c61; }
+.details { border-top: 1px solid #cbd3c8; margin-top: 32px; }
+.details button { border: 1px solid #bac7b8; border-radius: 4px; background: none; color: #31573f; padding: 7px 12px; }
+dl div { margin-bottom: 16px; }
+dt { font-size: 12px; color: #657560; }
+dd { margin: 3px 0; overflow-wrap: anywhere; }
+footer { display: flex; justify-content: space-between; gap: 20px; padding-top: 25px; margin-top: 56px; border-top: 1px solid #d5dccf; font-size: 12px; color: #657560; }
+@media (max-width: 640px) {
+  .workspace { padding: 22px; }
+  .team-tag { font-size: 9px; }
+  .eyebrow { margin-top: 45px; }
+  .notice { flex-direction: column; gap: 4px; }
+  .route-grid { grid-template-columns: 1fr; }
+  footer { flex-direction: column; gap: 5px; }
+}

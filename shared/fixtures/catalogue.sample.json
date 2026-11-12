@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "routes": [
+    {
+      "id": "sample-coastal-loop",
+      "name": "Sample Coastal Loop",
+      "difficulty": "easy",
+      "distanceMetres": 2400,
+      "estimatedMinutes": 50,
+      "startLatitude": -36.85,
+      "startLongitude": 174.76,
+      "sourceKind": "synthetic",
+      "attribution": "HikingProject development fixture — not a real or verified hiking route."
+    },
+    {
+      "id": "sample-ridge-walk",
+      "name": "Sample Ridge Walk",
+      "difficulty": "moderate",
+      "distanceMetres": 6200,
+      "estimatedMinutes": 150,
+      "startLatitude": -41.29,
+      "startLongitude": 174.77,
+      "sourceKind": "synthetic",
+      "attribution": "HikingProject development fixture — not a real or verified hiking route."
+    }
+  ]
+}

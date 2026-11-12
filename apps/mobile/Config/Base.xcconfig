@@ -1,0 +1,3 @@
+// An empty token keeps the sample catalogue usable without a Mapbox account.
+MAPBOX_ACCESS_TOKEN =
+#include? "Local.xcconfig"

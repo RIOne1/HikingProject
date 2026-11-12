@@ -1,11 +1,12 @@
 # HikingProject
 
-A planned native iPhone app for beginner-to-intermediate half-day and full-day hiking in New Zealand. The current repository contains product specifications, team policies and research; the app implementation and acceptance evidence are pending.
+A planned native iPhone app for beginner-to-intermediate half-day and full-day hiking in New Zealand. The repository includes native iOS and React internal-tool foundations, a shared synthetic catalogue, tests, team policies and research. The complete hiking workflow and MVP acceptance remain pending.
 
 ## Start here
 
 | Document | Purpose |
 | --- | --- |
+| [Development guide](docs/guides/DEVELOPMENT.md) | Mobile/Web setup, ownership, shared data and executable checks |
 | [MVP](docs/MVP.md) | Authoritative English scope, requirement IDs, architecture and acceptance gates |
 | [MVP 中文镜像](docs/MVP.zh-CN.md) | Matching Chinese version; update alongside meaningful English changes |
 | [CONTRIBUTING](CONTRIBUTING.md) | Issue-first work, numbered branches, commits, PR evidence, non-author human review and merge rules |
@@ -28,6 +29,7 @@ The team is planned as two to three people. The owner leads development with AI 
 | Area | Baseline |
 | --- | --- |
 | Client | Swift + SwiftUI, iPhone, iOS 18+; UIKit where required |
+| Internal web tool | React + TypeScript + Vite for team route/content work; no consumer web parity or GL JS |
 | Maps | Mapbox Maps SDK for iOS, conditional on technical and production-cost verification |
 | Recording and alerts | Core Location and local notifications, independent of map rendering |
 | Business data | SQLite + GRDB, parameterized SQL, stable IDs and versioned migrations |
@@ -43,7 +45,7 @@ Keep user data separate from Mapbox's managed cache. Future changes remain possi
 
 **Current development must remain free.** Do not activate paid services or upgrade trials automatically. Pause affected service use when a free quota or trial ends. The post-deployment service budget remains a hard NZ$50/month; Mapbox's lack of an automatic spending cap is an unresolved production-release condition. Apple Developer Program membership is a later, separately budgeted distribution expense. Validate demand before choosing monetization.
 
-There is no iOS app project or application test suite yet. [Repository CI](.github/workflows/repository-checks.yml) checks documents and contribution conventions on a self-hosted Linux runner; it does not build or test the iPhone app. See [runner requirements and cost limits](CONTRIBUTING.md#verification-evidence). The app-bootstrap PR must document actual verified targets, schemes and commands. Xcode 27.2 and Swift 6.4.2 were observed during planning. Those versions may change. No paid CI or cloud-build service is required for the current plan.
+The foundation includes `apps/mobile/HikingProject.xcodeproj`, a portable Swift/GRDB package and `apps/web/`. [Repository CI](.github/workflows/repository-checks.yml) checks documents, contribution conventions, React and portable Swift on the self-hosted Linux runner. iOS builds/UI tests run locally on Mac/Xcode. Follow the [development guide](docs/guides/DEVELOPMENT.md) and [actual validation evidence](docs/guides/FOUNDATION-VALIDATION.md); a tokenless sample build does not prove offline maps, recording or App Store readiness.
 
 This is a public repository. The active [`protect-main` ruleset](https://github.com/RIOne1/HikingProject/settings/rules/27098958) requires a PR, one approving review, resolved review conversations and squash merging; it dismisses stale approvals and blocks force pushes and deletion, with no bypass actors. Both `Documentation integrity` and `Contribution policy` are required GitHub Actions checks, and the task branch must be up to date with `main`. See the [verified configuration and human merge duties](CONTRIBUTING.md#7-github-enforcement-setup); passing CI does not replace human approval. See [SECURITY.md](SECURITY.md#reporting-a-vulnerability) for confidential reporting and its verification limits.
 
@@ -59,7 +61,7 @@ python3 -m unittest discover -s scripts/ci -p 'test_*.py' -v
 git diff --check
 ```
 
-These checks use Python's standard library and need no package installation. CI also validates PR metadata and commit subjects. Read the [coverage and bootstrap limits](CONTRIBUTING.md#verification-evidence); green checks do not constitute human approval, proof of translation accuracy or app acceptance.
+These checks use Python's standard library and need no package installation. CI also validates PR metadata and commit subjects. Read the [coverage and verification limits](CONTRIBUTING.md#verification-evidence); green checks do not constitute human approval, proof of translation accuracy or app acceptance.
 
 ## Repository layout
 
@@ -73,9 +75,16 @@ HikingProject/
 │   ├── ISSUE_TEMPLATE/  # Task, bug and technical-validation forms
 │   ├── workflows/repository-checks.yml
 │   └── pull_request_template.md
+├── apps/
+│   ├── mobile/  # SwiftUI app, Xcode project, portable core and tests
+│   └── web/     # React internal route/content workspace
+├── shared/      # Synthetic catalogue fixture, JSON Schema and Swift resource
+├── Package.swift / Package.resolved
+├── package.json / package-lock.json
 ├── docs/
 │   ├── MVP.md
 │   ├── MVP.zh-CN.md
+│   ├── guides/  # Development, mobile, web, data, CI and validation
 │   └── research/
 │       └── 2026-11-06-user-feedback/
 │           ├── Hiking_App_User_Feedback_Research_ZH_2026-11-06.pdf

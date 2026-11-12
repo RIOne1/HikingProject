@@ -15,6 +15,7 @@ Start with [README.md](README.md), [CONTRIBUTING.md](CONTRIBUTING.md), the task 
 | GPX, SQL, migrations or route content | MVP-02 and MVP-08 through MVP-10; current schema, fixtures and migrations |
 | Tokens, imports, location data, logging or vulnerabilities | [SECURITY.md](SECURITY.md) |
 | Branches, commits, PRs, review or AI disclosure | [CONTRIBUTING.md](CONTRIBUTING.md) and the [PR template](.github/pull_request_template.md) |
+| App/Web foundation or shared contract | [Development guide](docs/guides/DEVELOPMENT.md), then the relevant Mobile/Web/Data/CI guide |
 | Historical research | The relevant dated folder in `docs/research/`; findings are not automatic product commitments |
 
 English MVP is authoritative. If documents conflict materially, identify the conflict and get it resolved rather than silently weakening a requirement. Continue useful independent work while a blocking decision is pending.
@@ -28,7 +29,7 @@ English MVP is authoritative. If documents conflict materially, identify the con
 
 ## Implementation boundaries
 
-- Follow the agreed Swift/SwiftUI, iOS 18+, Mapbox iOS SDK, SQLite + GRDB, Core Location and lightweight modular architecture. Mapbox remains subject to verification and production-cost gates.
+- Follow the agreed Swift/SwiftUI, iOS 18+, Mapbox iOS SDK, SQLite + GRDB, Core Location and lightweight modular architecture. The React/TypeScript/Vite workspace is an internal route/content tool. Mapbox remains subject to verification and production-cost gates.
 - Keep recording and user data independent of map rendering/cache. Use stable IDs, parameterized SQL, transactions and versioned migrations. Explain important SQL; do not obscure all database work behind generated abstractions.
 - Implement the assigned scope without silently adding accounts, backend services, cloud backup, live sharing, automatic rerouting, social features or GL JS tools.
 - Identify new dependencies, schema changes, permissions and cost implications for human review. A material change to the agreed stack, scope or data contract needs an explicit human decision.
@@ -48,7 +49,7 @@ English MVP is authoritative. If documents conflict materially, identify the con
 - Keep CI proportionate: reuse commands/jobs; add jobs, dependencies or matrix entries for a concrete requirement or risk. Comment on non-obvious runner, trigger or permission choices. Avoid duplicate checks and unnecessary setup without dropping required coverage or masking failures.
 - Use meaningful checks rather than tests that copy the implementation. Prose-only edits need document checks, not an app build. Preserve bilingual MVP IDs and acceptance meaning; check local links and whitespace using the [documented commands](CONTRIBUTING.md#verification-evidence).
 - Offline, background-location, notification and battery claims need real-device evidence. Mark unavailable checks **Not run** and keep the relevant PR, product-acceptance or release gate blocked as defined in CONTRIBUTING.md; a follow-up Issue is not a waiver.
-- No iOS project or app test suite exists yet. Repository CI covers documents and contribution metadata; the first app-bootstrap task must establish verified build/test commands. The research PDF generator is not an app test.
+- Use the [verified foundation commands](docs/guides/DEVELOPMENT.md#validation-matrix). Linux CI covers Web and portable Swift/data checks; iOS build/UI evidence requires local Mac/Xcode. Keep `project.yml` and its committed generated Xcode project aligned. The research PDF generator is not an app test.
 
 ## Git and human handoff
 
