@@ -21,7 +21,7 @@ The root `Package.resolved` records the resolved graph used here, including Mapb
 
 ## CI and remaining gates
 
-The workflow runs Web and portable Swift tests inside the existing required `Documentation integrity` check, alongside the unchanged `Contribution policy` check. The first remote run for this foundation is pending when this record is introduced; the Draft PR records the current run result and any runner prerequisite failure. Do not merge with a failed or missing required check.
+The workflow runs Web and portable Swift tests inside the existing required `Documentation integrity` check, alongside the unchanged `Contribution policy` check. In the first [remote run](https://github.com/RIOne1/HikingProject/actions/runs/43209471551), contribution checks, document checks and all Web checks passed on `HikingProject-PC`; Swift setup failed because the Ubuntu runner image lacks `file`, so Linux Swift tests did not run. The [CI guide](CI.md#ubuntu-2404-image-preparation) provides the concrete image prerequisites. A prerequisite check now reports missing tools before setup; the Draft PR tracks the latest run. Do not merge with a failed or missing required check.
 
 Not run / not implemented: real-device installation, iOS 18 runtime coverage, token-enabled map rendering, offline packs, SDK telemetry/privacy behaviour, location permissions, foreground/background recording, notification delivery, battery endurance, GPX import/export, genuine route geometry/provenance, earlier-version schema upgrades, abrupt process interruption and App Store distribution. These remain their feature/product/release gates, not claims established by a sample catalogue. No paid service, Apple enrollment, Mapbox account activation, hosted runner or deployment was performed.
 

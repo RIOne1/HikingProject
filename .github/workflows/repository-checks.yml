@@ -42,6 +42,18 @@ jobs:
         run: |
           npm ci
           npm run check:web
+      - name: Verify native Swift prerequisites
+        # The owner builds these into the unprivileged runner image; PRs get no sudo.
+        run: |
+          missing=0
+          for tool in file gpg gunzip tar clang pkg-config; do
+            if ! command -v "$tool" >/dev/null; then
+              echo "::error::Runner image is missing $tool; see docs/guides/CI.md"
+              missing=1
+            fi
+          done
+          test "$missing" -eq 0
+          pkg-config --exists sqlite3 || { echo '::error::Install libsqlite3-dev in the runner image'; exit 1; }
       - name: Set up Swift
         uses: swift-actions/setup-swift@7ca6abe6b3b0e8b5421b88be48feee39cbf52c6a # v2.4.0
         with:
