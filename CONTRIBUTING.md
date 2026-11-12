@@ -158,8 +158,8 @@ Maintain the following configuration. File-based policy does not configure GitHu
 - Require resolution of review conversations and both repository checks named above from GitHub Actions. Keep **Require branches to be up to date before merging** enabled. If `main` advances, update the task branch and rerun checks; the new commit also needs fresh human approval.
 - Keep required check names aligned with actual workflow jobs. Coordinate any job rename with the ruleset update so that a required check is not left permanently missing. An offline runner leaves checks queued and blocks merging; restore the runner rather than remove the requirement or substitute paid infrastructure.
 - Block force pushes and deletion. Apply the requirements to administrators as supported, and do not grant bypass permissions that defeat non-author human review.
-- Permit squash merging and disable merge-commit/rebase merging for PRs. Linear-history protection alone does not mean squash-only.
-- Keep automated merging disabled and delete merged task branches.
+- Keep `protect-main`'s allowed merge methods set to squash only. Repository-wide merge-commit/rebase options are still enabled, but the ruleset disallows those methods for PRs targeting `main`.
+- Keep auto-merge disabled. Delete merged task branches manually; automatic branch deletion is currently off.
 - Recheck the configured behaviour after changing protection settings. Do not use destructive test pushes or deletions.
 
 Settings and CI do not establish human identity, Issue-before-development order or complete review. The author and reviewer must still apply the human merge duties in section 6.
